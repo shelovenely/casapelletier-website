@@ -1,0 +1,20 @@
+{
+  "_lisezMoi": "Le bar. Loi Évin : descriptions objectives uniquement (origine, âge, composition). Pas de superlatifs ni d'incitation. TODO client : valider la liste et les prix.",
+  "familles": [
+    { "titre_fr": "Rhums agricoles", "titre_en": "Agricole rums", "texte_fr": "Distillés à partir de pur jus de canne. Martinique, Guadeloupe, Marie-Galante. Blancs, ambrés, hors d'âge.", "texte_en": "Distilled from fresh sugar-cane juice. Martinique, Guadeloupe, Marie-Galante. White, amber, extra-aged." },
+    { "titre_fr": "Rhums de tradition anglaise", "titre_en": "British-style rums", "texte_fr": "Issus de la mélasse. Jamaïque, Barbade, Guyana. Des profils plus ronds, parfois très aromatiques.", "texte_en": "Made from molasses. Jamaica, Barbados, Guyana. Rounder profiles, sometimes very aromatic." },
+    { "titre_fr": "Whiskies d'Écosse", "titre_en": "Scotch whiskies", "texte_fr": "Speyside, Highlands, Islay. Single malts et quelques blends, servis nature ou avec une goutte d'eau.", "texte_en": "Speyside, Highlands, Islay. Single malts and a few blends, neat or with a drop of water." },
+    { "titre_fr": "Ailleurs", "titre_en": "Elsewhere", "texte_fr": "Japon, Irlande, États-Unis. Et quelques cognacs et armagnacs pour la fin du repas.", "texte_en": "Japan, Ireland, the United States. Plus a few cognacs and armagnacs to end the meal." }
+  ],
+  "cocktails": [
+    { "nom": "Le Château", "composition_fr": "Rhum vieux, vermouth rouge, bitter", "composition_en": "Aged rum, red vermouth, bitters", "prix": "18" },
+    { "nom": "Old Fashioned de la Casa", "composition_fr": "Bourbon, sucre de canne, bitters aromatiques, zeste d'orange", "composition_en": "Bourbon, cane sugar, aromatic bitters, orange zest", "prix": "18" },
+    { "nom": "Pernety Sour", "composition_fr": "Whisky, citron, sirop de miel, blanc d'œuf", "composition_en": "Whisky, lemon, honey syrup, egg white", "prix": "17" },
+    { "nom": "Gaîté", "composition_fr": "Whisky écossais, ginger beer, citron vert", "composition_en": "Scotch whisky, ginger beer, lime", "prix": "16" },
+    { "nom": "Coin du feu", "composition_fr": "Whisky tourbé, miel, citron, eau chaude. L'hiver seulement.", "composition_en": "Peated whisky, honey, lemon, hot water. Winter only.", "prix": "18" }
+  ],
+  "sansAlcool": [
+    { "nom": "Jardin d'hiver", "composition_fr": "Pomme pressée, gingembre, romarin, eau pétillante", "composition_en": "Pressed apple, ginger, rosemary, sparkling water", "prix": "10" },
+    { "nom": "Thé noir glacé maison", "composition_fr": "Infusé à froid, citron, miel", "composition_en": "Cold-brewed, lemon, honey", "prix": "7" }
+  ]
+}

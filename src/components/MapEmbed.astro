@@ -1,0 +1,50 @@
+---
+/**
+ * Carte Google Maps chargée uniquement après consentement (pas de cookie tiers par défaut).
+ * Sans consentement : façade statique + lien vers Google Maps.
+ */
+import { infos, adresseLigne } from '../lib/data';
+import type { Lang } from '../i18n/ui';
+interface Props { lang: Lang; class?: string }
+const { lang, class: cls = '' } = Astro.props;
+const q = encodeURIComponent(`Casa Pelletier, ${adresseLigne}`);
+const src = `https://www.google.com/maps?q=${q}&hl=${lang}&z=16&output=embed`;
+const txt = lang === 'fr'
+  ? { show: 'Afficher la carte', note: 'La carte est fournie par Google, qui dépose des cookies. En l’affichant, vous acceptez ces cookies.', open: 'Ouvrir dans Google Maps', title: 'Carte : Casa Pelletier, 101 rue du Château, Paris 14e' }
+  : { show: 'Show the map', note: 'The map is provided by Google, which sets cookies. Showing it means you accept them.', open: 'Open in Google Maps', title: 'Map: Casa Pelletier, 101 rue du Château, Paris 14th' };
+---
+<div class:list={['relative aspect-[4/3] w-full overflow-hidden bg-vert-deep md:aspect-auto md:min-h-[26rem]', cls]} data-map data-src={src} data-title={txt.title}>
+  <div class="absolute inset-0 flex flex-col items-center justify-center gap-4 p-8 text-center" data-map-facade>
+    <svg aria-hidden="true" viewBox="0 0 120 80" class="w-40 text-laiton/50" fill="none" stroke="currentColor" stroke-width=".8">
+      <path d="M0 52 40 30l35 20 45-26M10 0l25 80M70 0 60 80M0 20h120"/>
+      <circle cx="60" cy="40" r="4" fill="currentColor" stroke="none" class="text-laiton"/>
+    </svg>
+    <p class="max-w-sm text-xs text-ivoire-mute">{txt.note}</p>
+    <div class="flex flex-wrap justify-center gap-3">
+      <button type="button" class="btn-ghost min-h-11 cursor-pointer" data-map-load>{txt.show}</button>
+      <a href={infos.googleMapsUrl} class="btn-ghost min-h-11" rel="noopener" target="_blank">{txt.open}</a>
+    </div>
+  </div>
+</div>
+<script>
+  import { getConsent, setConsent } from '../lib/consent';
+  const load = (box: HTMLElement) => {
+    if (box.querySelector('iframe')) return;
+    const f = document.createElement('iframe');
+    f.src = box.dataset.src!;
+    f.title = box.dataset.title!;
+    f.loading = 'lazy';
+    f.referrerPolicy = 'no-referrer-when-downgrade';
+    f.className = 'absolute inset-0 h-full w-full border-0 grayscale-[.35] contrast-[1.05]';
+    box.querySelector('[data-map-facade]')?.remove();
+    box.append(f);
+  };
+  const boxes = document.querySelectorAll<HTMLElement>('[data-map]');
+  boxes.forEach((box) => {
+    if (getConsent() === true) load(box);
+    box.querySelector('[data-map-load]')?.addEventListener('click', () => { setConsent(true); });
+  });
+  window.addEventListener('cp:consent', (e) => {
+    if ((e as CustomEvent).detail.maps) boxes.forEach(load);
+  });
+</script>

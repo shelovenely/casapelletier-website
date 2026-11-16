@@ -1,0 +1,15 @@
+---
+import Legal from '../../../components/pages/Legal.astro';
+import { infos, adresseLigne } from '../../../lib/data';
+---
+<Legal lang="en" route="legal" title="Legal notice · Casa Pelletier" description="Legal notice for casapelletier.fr: publisher, host, intellectual property." h1="Legal notice" updated="Last updated: November 2026">
+  <p>The French version of this page is the authoritative one: <a href="/mentions-legales/">Mentions légales</a>.</p>
+  <h2>Publisher</h2>
+  <p>[Company name], {adresseLigne}. Phone: {infos.telephone}. Publication director: [name].</p>
+  <h2>Hosting</h2>
+  <p>Netlify, Inc. — 512 2nd Street, Suite 200, San Francisco, CA 94107, USA.</p>
+  <h2>Intellectual property</h2>
+  <p>All texts, photographs and graphics on this site belong to Casa Pelletier or their respective authors. Reproduction without written permission is prohibited.</p>
+  <h2>Alcohol and tobacco</h2>
+  <p>L'abus d'alcool est dangereux pour la santé, à consommer avec modération (alcohol abuse is dangerous for your health; please drink responsibly). Smoking seriously harms you and those around you. This site does not promote any tobacco product; information about the smoking room is provided for information only.</p>
+</Legal>

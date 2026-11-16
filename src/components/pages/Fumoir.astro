@@ -1,0 +1,149 @@
+---
+/**
+ * ⚠️ CONFORMITÉ LOI ÉVIN (TABAC) — page volontairement strictement informative.
+ * Interdit : marques, prix, promotions, visuels valorisants, vocabulaire incitatif.
+ * TODO client : faire valider cette page par un juriste avant mise en ligne (voir docs/conformite.md).
+ */
+import Base from '../../layouts/Base.astro';
+import PageHero from '../PageHero.astro';
+import Photo from '../ui/Photo.astro';
+import Heading from '../ui/Heading.astro';
+import { t, href, type Lang } from '../../i18n/ui';
+import { breadcrumbSchema } from '../../lib/schema';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const u = t(lang);
+const fr = lang === 'fr';
+
+const c = fr
+  ? {
+      title: 'Le Fumoir & la Cave · Fumoir à cigares, Paris 14 · Casa Pelletier',
+      description: 'Informations sur le fumoir de Casa Pelletier : une pièce close et ventilée réservée aux amateurs de cigare, conforme à la réglementation. Établissement sans cigarette. Paris 14e.',
+      eyebrow: 'III. Le Fumoir & la Cave',
+      h1: 'Une pièce à part.',
+      intro: 'Le cigare a sa place à la Casa, mais une seule : le fumoir. Le reste de la maison est entièrement non-fumeur.',
+      notice: 'Cette page présente un espace de l’établissement et les règles qui s’y appliquent. Elle a une vocation purement informative.',
+      spaceEyebrow: 'L’espace',
+      spaceTitle: 'Comment fonctionne le fumoir',
+      rules: [
+        ['Une pièce close', 'Le fumoir est séparé des salons par une porte à fermeture automatique. La fumée ne passe pas dans le reste de l’établissement.'],
+        ['Ventilé en continu', 'Un système d’extraction dédié renouvelle l’air en permanence, conformément aux normes applicables aux emplacements fumeurs.'],
+        ['Réservé aux adultes', 'L’accès est interdit aux mineurs.'],
+        ['Sans service', 'La réglementation interdit toute prestation de service à l’intérieur du fumoir. On y entre avec son verre, on revient au salon pour commander.'],
+        ['Cigare uniquement', 'La Casa est un lieu sans cigarette, y compris au fumoir.'],
+      ],
+      caveEyebrow: 'La cave',
+      caveTitle: 'Conserver dans de bonnes conditions',
+      cave: [
+        'La cave est une pièce boisée dont la température et l’hygrométrie sont contrôlées. Un cigare se conserve autour de 70 % d’humidité et à une température stable, à l’abri de la lumière.',
+        'Les clients qui apportent leurs propres cigares peuvent demander conseil sur leur conservation.',
+      ],
+      reperesEyebrow: 'Quelques repères',
+      reperesTitle: 'Pour les novices',
+      reperesIntro: 'Les questions qu’on nous pose le plus souvent, et leurs réponses, sans plus.',
+      reperes: [
+        ['La coupe', 'On coupe la tête, le côté fermé, d’un geste net, juste au-dessus de la ligne où la cape s’arrondit. Couper trop bas fait se défaire la feuille extérieure.'],
+        ['L’allumage', 'On chauffe le pied à distance de la flamme, en tournant, avant de l’allumer. Une allumette longue ou une flamme sans odeur évite d’altérer le goût.'],
+        ['Le rythme', 'Un cigare ne se rallume pas indéfiniment et ne s’écrase pas : on le laisse s’éteindre de lui-même dans le cendrier.'],
+        ['La courtoisie', 'On referme la porte derrière soi, on laisse les fauteuils aussi propres qu’on les a trouvés.'],
+      ],
+      back: 'Retour aux salons',
+    }
+  : {
+      title: 'Cigar Lounge & Humidor · Paris 14th · Casa Pelletier',
+      description: 'Information about the Casa Pelletier smoking room: a closed, ventilated room for cigar smokers, compliant with French regulations. Cigarette-free venue. Paris 14th.',
+      eyebrow: 'III. Cigar Lounge & Humidor',
+      h1: 'A room apart.',
+      intro: 'Cigars have their place at Casa Pelletier, but only one: the smoking room. The rest of the house is entirely non-smoking.',
+      notice: 'This page describes one area of the venue and the rules that apply there. It is provided for information only.',
+      spaceEyebrow: 'The room',
+      spaceTitle: 'How the smoking room works',
+      rules: [
+        ['A closed room', 'The smoking room is separated from the lounges by a self-closing door. Smoke does not reach the rest of the venue.'],
+        ['Continuously ventilated', 'A dedicated extraction system constantly renews the air, in line with the standards for smoking areas.'],
+        ['Adults only', 'Minors are not admitted.'],
+        ['No service inside', 'French law forbids any service inside a smoking room. Bring your glass in, and come back to the lounge to order.'],
+        ['Cigars only', 'Casa Pelletier is cigarette-free, smoking room included.'],
+      ],
+      caveEyebrow: 'The humidor',
+      caveTitle: 'Keeping cigars properly',
+      cave: [
+        'The humidor is a wood-panelled room with controlled temperature and humidity. Cigars keep best at around 70% humidity, at a stable temperature, away from light.',
+        'Guests who bring their own cigars are welcome to ask for advice on storing them.',
+      ],
+      reperesEyebrow: 'A few pointers',
+      reperesTitle: 'For newcomers',
+      reperesIntro: 'The questions we hear most often, and their answers. Nothing more.',
+      reperes: [
+        ['Cutting', 'Cut the head, the closed end, cleanly and just above the line where the wrapper curves. Cutting too low makes the outer leaf unravel.'],
+        ['Lighting', 'Warm the foot at a distance from the flame, turning it, before lighting. A long match or an odourless flame keeps the taste intact.'],
+        ['Pace', 'A cigar is not relit endlessly and is not stubbed out: leave it to go out on its own in the ashtray.'],
+        ['Courtesy', 'Close the door behind you, and leave the armchairs as you found them.'],
+      ],
+      back: 'Back to the lounges',
+    };
+// TODO client : lien et relation avec Art Tabac à préciser (statut légal de la vente de cigares sur place, validation juridique).
+const crumbs = breadcrumbSchema(Astro.site!, [{ name: u.nav.home, path: href('home', lang) }, { name: u.nav.fumoir, path: href('fumoir', lang) }]);
+---
+<Base lang={lang} route="fumoir" title={c.title} description={c.description} schema={[crumbs]} overlayHeader>
+  <PageHero image="fumoir-salon-cuir-ventile.jpg" alt={fr ? 'Le fumoir : une pièce close, fauteuils en cuir et murs sombres' : 'The smoking room: a closed room with leather armchairs and dark walls'} eyebrow={c.eyebrow} title={c.h1} intro={c.intro} />
+
+  <aside class="border-y border-ivoire/10 bg-noir">
+    <div class="wrap flex flex-col gap-2 py-6 text-sm sm:flex-row sm:items-center sm:gap-8">
+      <p class="font-medium text-ivoire">{u.tobacco}</p>
+      <p class="text-ivoire-mute">{c.notice}</p>
+    </div>
+  </aside>
+
+  <section class="py-24 md:py-32">
+    <div class="wrap">
+      <Heading eyebrow={c.spaceEyebrow} title={c.spaceTitle} />
+      <dl class="mt-14 grid gap-x-12 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
+        {c.rules.map(([title, text], i) => (
+          <div class="border-t border-laiton/30 pt-6" data-reveal>
+            <dt class="flex items-baseline gap-3 font-serif text-2xl"><span class="text-base text-laiton italic">{i + 1}.</span>{title}</dt>
+            <dd class="mt-3 text-ivoire-mute">{text}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <section class="bg-vert py-24 md:py-32">
+    <div class="wrap grid items-center gap-12 md:grid-cols-12">
+      <div class="aspect-[4/5] overflow-hidden md:col-span-5" data-reveal>
+        <Photo src="cave-a-cigares-boiseries.jpg" alt={fr ? 'La cave : une pièce aux boiseries sombres et à l’éclairage doux' : 'The humidor: a room with dark wood panelling and soft lighting'} sizes="(min-width: 768px) 40vw, 100vw" />
+      </div>
+      <div class="md:col-span-6 md:col-start-7" data-reveal>
+        <p class="eyebrow mb-5">{c.caveEyebrow}</p>
+        <h2 class="h-section">{c.caveTitle}</h2>
+        <div class="mt-6 space-y-5 text-ivoire-mute">{c.cave.map((p) => <p>{p}</p>)}</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-24 md:py-32">
+    <div class="wrap grid gap-12 lg:grid-cols-12">
+      <div class="lg:col-span-4">
+        <Heading eyebrow={c.reperesEyebrow} title={c.reperesTitle} />
+        <p class="mt-5 text-ivoire-mute" data-reveal>{c.reperesIntro}</p>
+      </div>
+      <dl class="divide-y divide-ivoire/10 border-y border-ivoire/10 lg:col-span-7 lg:col-start-6">
+        {c.reperes.map(([title, text]) => (
+          <div class="grid gap-2 py-6 sm:grid-cols-[10rem_1fr] sm:gap-8" data-reveal>
+            <dt class="font-serif text-2xl">{title}</dt>
+            <dd class="text-ivoire-mute">{text}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <section class="border-t border-ivoire/10 py-16">
+    <div class="wrap flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <p class="text-sm text-ivoire-mute">{u.tobacco}</p>
+      <a href={href('home', lang)} class="link-underline text-[0.8rem] tracking-[0.18em] text-laiton uppercase">← {c.back}</a>
+    </div>
+  </section>
+</Base>

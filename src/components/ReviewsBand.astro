@@ -1,0 +1,42 @@
+---
+/**
+ * Avis : on affiche les notes réelles et les expressions qui reviennent dans les avis publics.
+ * Pas de faux témoignages. TODO client : pour citer un avis en entier, obtenir l'accord de son auteur.
+ * Loi Évin : l'expression « temple du cigare » est volontairement écartée.
+ */
+import { infos } from '../lib/data';
+import type { Lang } from '../i18n/ui';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const { avis } = infos;
+const words = lang === 'fr' ? avis.motsCles_fr : avis.motsCles_en;
+const fmt = (n: number) => n.toLocaleString(lang === 'fr' ? 'fr-FR' : 'en-GB', { minimumFractionDigits: 1 });
+---
+<section class="relative overflow-hidden bg-tabac/40 py-20 md:py-28" aria-labelledby="avis-titre">
+  <div class="wrap">
+    <p class="eyebrow mb-8" data-reveal>{lang === 'fr' ? 'Ce que disent nos clients' : 'What our guests say'}</p>
+    <h2 id="avis-titre" class="sr-only">{lang === 'fr' ? 'Avis clients' : 'Guest reviews'}</h2>
+    <ul class="font-serif text-[2.2rem] leading-[1.15] italic sm:text-5xl lg:text-6xl" data-reveal>
+      {words.map((w, i) => (
+        <li class:list={['inline', i % 2 ? 'text-laiton' : 'text-ivoire']}>
+          « {w} »{i < words.length - 1 && <span aria-hidden="true" class="mx-3 not-italic text-ivoire/25">·</span>}
+        </li>
+      ))}
+    </ul>
+
+    <div class="mt-14 grid gap-6 border-t border-ivoire/15 pt-8 sm:grid-cols-3" data-reveal>
+      <a href={avis.tripadvisor.url} rel="noopener" target="_blank" class="group">
+        <p class="font-serif text-5xl">{fmt(avis.tripadvisor.note)}<span class="text-2xl text-ivoire-mute">/5</span></p>
+        <p class="mt-1 text-sm text-ivoire-mute group-hover:text-laiton">Tripadvisor</p>
+      </a>
+      <div>
+        <p class="font-serif text-5xl">{fmt(avis.tripadvisor.service)}<span class="text-2xl text-ivoire-mute">/5</span></p>
+        <p class="mt-1 text-sm text-ivoire-mute">{lang === 'fr' ? 'Service, sur Tripadvisor' : 'Service, on Tripadvisor'}</p>
+      </div>
+      <a href={avis.google.url} rel="noopener" target="_blank" class="group">
+        <p class="font-serif text-5xl">{fmt(avis.google.note)}<span class="text-2xl text-ivoire-mute">/5</span></p>
+        <p class="mt-1 text-sm text-ivoire-mute group-hover:text-laiton">Google</p>
+      </a>
+    </div>
+  </div>
+</section>

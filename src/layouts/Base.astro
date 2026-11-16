@@ -1,0 +1,87 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import MobileCallBar from '../components/MobileCallBar.astro';
+import CookieBanner from '../components/CookieBanner.astro';
+import { ROUTES, type Lang, type RouteKey } from '../i18n/ui';
+import { localBusinessSchema } from '../lib/schema';
+
+interface Props {
+  lang: Lang;
+  route: RouteKey | null;
+  title: string;
+  description: string;
+  ogImage?: string;
+  noindex?: boolean;
+  schema?: object[];
+  /** Header transparent posé sur une photo plein écran */
+  overlayHeader?: boolean;
+}
+
+const { lang, route, title, description, ogImage = '/og/og-casa-pelletier.jpg', noindex = false, schema = [], overlayHeader = false } = Astro.props;
+const site = Astro.site!;
+const canonical = new URL(Astro.url.pathname, site).href;
+const alternates = route ? (['fr', 'en'] as Lang[]).map((l) => ({ lang: l, href: new URL(ROUTES[route][l], site).href })) : [];
+const ld = [localBusinessSchema(site, lang), ...schema];
+---
+
+<!doctype html>
+<html lang={lang} class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>document.documentElement.classList.replace('no-js', 'js');</script>
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    {alternates.map((a) => <link rel="alternate" hreflang={a.lang} href={a.href} />)}
+    {route && <link rel="alternate" hreflang="x-default" href={new URL(ROUTES[route].fr, site).href} />}
+
+    <meta name="theme-color" content="#141210" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Casa Pelletier" />
+    <meta property="og:locale" content={lang === 'fr' ? 'fr_FR' : 'en_GB'} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(ogImage, site).href} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Casa Pelletier, 101 rue du Château, Paris 14e" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    {ld.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+  </head>
+  <body class="flex min-h-svh flex-col pb-16 md:pb-0">
+    <a href="#contenu" class="sr-only z-[100] bg-laiton px-4 py-2 text-noir focus:not-sr-only focus:fixed focus:top-3 focus:left-3">
+      {lang === 'fr' ? 'Aller au contenu' : 'Skip to content'}
+    </a>
+    <Header lang={lang} route={route} overlay={overlayHeader} />
+    <main id="contenu" class="flex-1">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+    <MobileCallBar lang={lang} />
+    <CookieBanner lang={lang} />
+
+    <script>
+      // Apparitions lentes au défilement
+      const els = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); } }),
+          { rootMargin: '0px 0px -8% 0px' },
+        );
+        els.forEach((el) => io.observe(el));
+      } else {
+        els.forEach((el) => el.classList.add('is-visible'));
+      }
+    </script>
+  </body>
+</html>

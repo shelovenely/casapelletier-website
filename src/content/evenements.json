@@ -1,0 +1,20 @@
+{
+  "_lisezMoi": "Formats de réception et agenda. Un événement de l'agenda n'apparaît que si « publie » vaut true et que sa date n'est pas passée. TODO client : valider capacités, espaces et conditions de privatisation (totale / partielle).",
+  "capaciteMax": 80,
+  "formats": [
+    { "titre_fr": "Afterwork", "titre_en": "After-work drinks", "capacite_fr": "15 à 80 personnes, debout", "capacite_en": "15 to 80 guests, standing", "texte_fr": "Planches, cocktails, terrasse aux beaux jours. On s'occupe du rythme, vous vous occupez de votre équipe.", "texte_en": "Sharing boards, cocktails, the terrace when the weather allows. We handle the pace; you look after your team." },
+    { "titre_fr": "Séminaire & réunion", "titre_en": "Seminars & meetings", "capacite_fr": "10 à 40 personnes, assis", "capacite_en": "10 to 40 guests, seated", "texte_fr": "Un salon au calme le matin ou l'après-midi, puis le déjeuner ou le dîner sur place.", "texte_en": "A quiet lounge in the morning or afternoon, followed by lunch or dinner on site." },
+    { "titre_fr": "Cocktail professionnel", "titre_en": "Corporate reception", "capacite_fr": "Jusqu'à 80 personnes", "capacite_en": "Up to 80 guests", "texte_fr": "Lancement, fin d'année, départ en retraite. Pièces salées et sucrées, bar ouvert ou au forfait.", "texte_en": "Launches, year-end parties, farewells. Savoury and sweet bites, open bar or fixed package." },
+    { "titre_fr": "Anniversaire", "titre_en": "Birthdays", "capacite_fr": "10 à 80 personnes", "capacite_en": "10 to 80 guests", "texte_fr": "Une grande table près de la cheminée, ou tout le salon. Le gâteau peut venir de chez nous.", "texte_en": "A long table by the fireplace, or the whole lounge. The cake can come from our kitchen." },
+    { "titre_fr": "Enterrement de vie de garçon", "titre_en": "Stag parties", "capacite_fr": "8 à 25 personnes", "capacite_en": "8 to 25 guests", "texte_fr": "Côte de bœuf à partager, salon réservé, et une soirée qui reste élégante jusqu'au bout.", "texte_en": "Rib of beef to share, a reserved lounge, and an evening that stays civilised to the end." }
+  ],
+  "espaces": [
+    { "nom_fr": "Le salon de la cheminée", "nom_en": "The fireplace lounge", "capacite_fr": "30 assis · 45 debout", "capacite_en": "30 seated · 45 standing" },
+    { "nom_fr": "La terrasse arborée et couverte", "nom_en": "The covered garden terrace", "capacite_fr": "30 assis · 40 debout", "capacite_en": "30 seated · 40 standing" },
+    { "nom_fr": "L'établissement entier", "nom_en": "The whole venue", "capacite_fr": "Jusqu'à 80 personnes", "capacite_en": "Up to 80 guests" }
+  ],
+  "_todoEspaces": "TODO client : capacités par espace à confirmer, et préciser si la privatisation est totale, partielle ou les deux.",
+  "agenda": [
+    { "date": "2026-12-11", "publie": false, "titre_fr": "Soirée jazz au coin du feu", "titre_en": "Jazz by the fire", "texte_fr": "Un trio dans le salon, à partir de 20 h. Réservation conseillée.", "texte_en": "A trio in the lounge from 8pm. Booking recommended." }
+  ]
+}

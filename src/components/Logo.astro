@@ -1,0 +1,9 @@
+---
+/** Logotype typographique provisoire. TODO client : remplacer par le logo officiel (SVG) s'il existe. */
+interface Props { class?: string }
+const { class: cls = '' } = Astro.props;
+---
+<span class:list={['inline-flex flex-col items-start leading-none', cls]}>
+  <span class="font-serif text-[1.55rem] tracking-[0.02em]">Casa Pelletier</span>
+  <span class="mt-1 text-[0.58rem] uppercase tracking-[0.42em] text-laiton">Paris · XIV<sup class="text-[0.5em]">e</sup></span>
+</span>

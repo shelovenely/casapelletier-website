@@ -1,0 +1,139 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../PageHero.astro';
+import Photo from '../ui/Photo.astro';
+import Heading from '../ui/Heading.astro';
+import Ornament from '../ui/Ornament.astro';
+import BookingCta from '../BookingCta.astro';
+import { t, href, type Lang } from '../../i18n/ui';
+import { carte, pick } from '../../lib/data';
+import { breadcrumbSchema } from '../../lib/schema';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const u = t(lang);
+const fr = lang === 'fr';
+const signatures = carte.sections.flatMap((s) => s.plats).filter((p) => p.signature && p.photo);
+const euro = (p: string) => (fr ? `${p.replace('.', ',')} €` : `€${p.replace(',', '.')}`);
+
+const c = fr
+  ? {
+      title: 'La Table · Restaurant de viande à Montparnasse · Casa Pelletier',
+      description: 'Cuisine française, carte courte et produits frais. Côte de bœuf « de la Casa » pour deux, planches, baba au rhum. Restaurant Paris 14e, près de Montparnasse.',
+      eyebrow: 'I. La Table',
+      h1: 'Peu de plats.<br /><em>Tous faits ici.</em>',
+      intro: 'Une cuisine française de saison, sans démonstration. On la pense pour aller avec un bon verre et une longue soirée.',
+      philoTitle: 'Une carte courte, c’est un choix.',
+      philo: [
+        'Moins de plats, c’est des produits plus frais et une cuisine faite à la minute. La carte suit le marché et change par petites touches.',
+        'La viande est au centre. La côte de bœuf de la Casa arrive entière, reposée, puis tranchée devant vous. Le reste accompagne : des entrées simples, des planches à partager, des desserts de maison.',
+      ],
+      sigEyebrow: 'Les signatures',
+      sigTitle: 'Ce qu’on vient chercher',
+      carteEyebrow: 'La carte',
+      carteTitle: 'À la carte',
+      updated: 'Carte du moment',
+      sig: 'Signature',
+    }
+  : {
+      title: 'Dining · Steak restaurant near Montparnasse · Casa Pelletier',
+      description: 'French cooking, a short menu and fresh produce. The Casa rib of beef for two, sharing boards, rum baba. Restaurant in Paris 14th, near Montparnasse.',
+      eyebrow: 'I. Dining',
+      h1: 'Few dishes.<br /><em>All made here.</em>',
+      intro: 'Seasonal French cooking without the showmanship. Designed to go with a good glass and a long evening.',
+      philoTitle: 'A short menu is a choice.',
+      philo: [
+        'Fewer dishes means fresher produce and food cooked to order. The menu follows the market and changes a little at a time.',
+        'Meat is at the heart of it. The Casa rib of beef arrives whole, rested, then carved in front of you. The rest plays along: simple starters, boards to share, house desserts.',
+      ],
+      sigEyebrow: 'Signatures',
+      sigTitle: 'What people come back for',
+      carteEyebrow: 'The menu',
+      carteTitle: 'À la carte',
+      updated: 'Current menu',
+      sig: 'Signature',
+    };
+
+const menuSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Menu',
+  name: fr ? 'Carte de Casa Pelletier' : 'Casa Pelletier menu',
+  inLanguage: lang,
+  hasMenuSection: carte.sections.map((s) => ({
+    '@type': 'MenuSection',
+    name: pick(s, 'titre', lang),
+    hasMenuItem: s.plats.map((p) => ({
+      '@type': 'MenuItem',
+      name: pick(p, 'nom', lang),
+      ...(pick(p, 'description', lang) ? { description: pick(p, 'description', lang) } : {}),
+      offers: { '@type': 'Offer', price: p.prix.replace(',', '.'), priceCurrency: 'EUR' },
+    })),
+  })),
+};
+const crumbs = breadcrumbSchema(Astro.site!, [{ name: u.nav.home, path: href('home', lang) }, { name: u.nav.table, path: href('table', lang) }]);
+---
+<Base lang={lang} route="table" title={c.title} description={c.description} schema={[menuSchema, crumbs]} overlayHeader>
+  <PageHero image="table-salle-dressee.jpg" alt={fr ? 'La salle du restaurant dressée pour le dîner, nappes blanches et lumière basse' : 'The dining room set for dinner, white tablecloths and low light'} eyebrow={c.eyebrow} title={c.h1} intro={c.intro} />
+
+  <section class="py-24 md:py-32">
+    <div class="wrap grid gap-10 md:grid-cols-12">
+      <h2 class="h-section md:col-span-5" data-reveal>{c.philoTitle}</h2>
+      <div class="space-y-5 text-ivoire-mute md:col-span-6 md:col-start-7" data-reveal>
+        {c.philo.map((p) => <p>{p}</p>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="pb-24 md:pb-32">
+    <div class="wrap">
+      <Heading eyebrow={c.sigEyebrow} title={c.sigTitle} />
+      <ul class="mt-14 grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
+        {signatures.map((p, i) => (
+          <li class:list={[i % 2 === 1 && 'lg:mt-16']} data-reveal>
+            <div class="aspect-[4/5] overflow-hidden"><Photo src={p.photo} alt={pick(p, 'nom', lang)} sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" /></div>
+            <h3 class="mt-5 font-serif text-2xl">{pick(p, 'nom', lang)}</h3>
+            {pick(p, 'description', lang) && <p class="mt-2 text-sm text-ivoire-mute">{pick(p, 'description', lang)}</p>}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- La carte, sur fond ivoire comme une carte imprimée -->
+  <section id="carte" class="paper py-24 md:py-32" aria-labelledby="carte-titre">
+    <div class="mx-auto max-w-3xl px-5 sm:px-8">
+      <div class="text-center">
+        <p class="eyebrow">{c.carteEyebrow}</p>
+        <h2 id="carte-titre" class="mt-4 font-serif text-5xl sm:text-6xl">{c.carteTitle}</h2>
+        <p class="mt-3 text-sm text-tabac">{c.updated}</p>
+        <Ornament class="mx-auto mt-8 max-w-[12rem] text-cognac-dark" />
+      </div>
+
+      {carte.sections.map((s) => (
+        <div class="mt-16">
+          <h3 class="text-center font-serif text-3xl italic text-tabac">{pick(s, 'titre', lang)}</h3>
+          <ul class="mt-8 space-y-6">
+            {s.plats.map((p) => (
+              <li>
+                <div class="flex items-baseline gap-3">
+                  <span class="font-serif text-xl leading-snug">
+                    {pick(p, 'nom', lang)}
+                    {p.signature && <span class="ml-2 align-middle font-sans text-[0.62rem] uppercase tracking-[0.2em] text-cognac-dark">{c.sig}</span>}
+                  </span>
+                  <span aria-hidden="true" class="min-w-6 flex-1 translate-y-[-0.3em] border-b border-dotted border-tabac/40"></span>
+                  <span class="font-serif text-xl tabular-nums">{euro(p.prix)}</span>
+                </div>
+                {pick(p, 'description', lang) && <p class="mt-1 max-w-xl text-[0.95rem] text-tabac">{pick(p, 'description', lang)}</p>}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+
+      <p class="mt-16 text-center text-sm text-tabac">{pick(carte, 'note', lang)}</p>
+      <p class="mt-2 text-center text-sm"><a href={href('bar', lang)} class="text-cognac-dark underline underline-offset-4">{fr ? 'La carte du bar' : 'The bar menu'} →</a></p>
+    </div>
+  </section>
+
+  <BookingCta lang={lang} />
+</Base>

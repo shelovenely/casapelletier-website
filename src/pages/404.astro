@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+import { telHref, infos } from '../lib/data';
+---
+<Base lang="fr" route={null} title="Page introuvable · Casa Pelletier" description="Cette page n'existe pas ou plus." noindex>
+  <section class="flex min-h-[80svh] items-center pt-24">
+    <div class="wrap">
+      <p class="eyebrow">Erreur 404</p>
+      <h1 class="display mt-5">Cette porte-là<br /><em class="text-laiton">ne mène nulle part.</em></h1>
+      <p class="lead mt-6 max-w-lg">La page que vous cherchez n'existe pas, ou plus. Les salons, eux, sont toujours là.</p>
+      <div class="mt-10 flex flex-col gap-3 sm:flex-row">
+        <a href="/" class="btn-primary">Retour à l'accueil</a>
+        <a href={telHref} class="btn-ghost">{infos.telephone}</a>
+        <a href="/en/" class="btn-ghost" lang="en">English</a>
+      </div>
+    </div>
+  </section>
+</Base>

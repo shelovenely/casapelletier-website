@@ -1,0 +1,161 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../PageHero.astro';
+import Photo from '../ui/Photo.astro';
+import Heading from '../ui/Heading.astro';
+import QuoteForm from '../QuoteForm.astro';
+import { t, href, type Lang } from '../../i18n/ui';
+import { infos, telHref, evenements, agendaAVenir, pick } from '../../lib/data';
+import { breadcrumbSchema } from '../../lib/schema';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const u = t(lang);
+const fr = lang === 'fr';
+const agenda = agendaAVenir();
+
+const c = fr
+  ? {
+      title: 'Événements & privatisation · Afterwork, séminaire, anniversaire · Casa Pelletier Paris 14',
+      description: 'Privatisez Casa Pelletier jusqu’à 80 personnes : afterworks, séminaires, cocktails professionnels, anniversaires, EVG. Salons Chesterfield, cheminée, terrasse couverte. Devis sous 48 h.',
+      eyebrow: 'IV. Événements & privatisation',
+      h1: 'Recevoir,<br /><em>comme à la maison.</em>',
+      intro: 'De dix à quatre-vingts personnes. Un salon, la terrasse ou toute la maison.',
+      formatsEyebrow: 'Les formats',
+      formatsTitle: 'Ce que l’on organise',
+      spacesEyebrow: 'Les espaces',
+      spacesTitle: 'Où vous installer',
+      stepsEyebrow: 'Comment ça se passe',
+      steps: [
+        ['Vous nous écrivez', 'Quelques lignes suffisent : la date, le nombre de personnes, l’idée générale.'],
+        ['On vous rappelle', 'Sous 48 heures, pour comprendre ce que vous avez en tête et vous proposer une visite.'],
+        ['Vous recevez un devis', 'Menu, boissons, horaires, espace : tout est écrit, sans surprise.'],
+      ],
+      formEyebrow: 'Demande de devis',
+      formTitle: 'Parlez-nous de votre projet',
+      formAside: 'Vous préférez en parler de vive voix ?',
+      agenda: 'Prochains rendez-vous',
+    }
+  : {
+      title: 'Events & private hire · After-work, seminars, birthdays · Casa Pelletier Paris',
+      description: 'Hire Casa Pelletier for up to 80 guests: after-work drinks, seminars, corporate receptions, birthdays, stag parties. Chesterfield lounges, fireplace, covered terrace. Quote within 48 hours.',
+      eyebrow: 'IV. Events & private hire',
+      h1: 'Hosting,<br /><em>as if at home.</em>',
+      intro: 'From ten to eighty guests. One lounge, the terrace, or the whole house.',
+      formatsEyebrow: 'Formats',
+      formatsTitle: 'What we host',
+      spacesEyebrow: 'Spaces',
+      spacesTitle: 'Where to gather',
+      stepsEyebrow: 'How it works',
+      steps: [
+        ['You write to us', 'A few lines are enough: the date, the number of guests, the general idea.'],
+        ['We call you back', 'Within 48 hours, to understand what you have in mind and offer a visit.'],
+        ['You get a quote', 'Menu, drinks, timing, space: everything in writing, no surprises.'],
+      ],
+      formEyebrow: 'Request a quote',
+      formTitle: 'Tell us about your event',
+      formAside: 'Would you rather talk it through?',
+      agenda: 'Upcoming',
+    };
+
+const crumbs = breadcrumbSchema(Astro.site!, [{ name: u.nav.home, path: href('home', lang) }, { name: u.nav.events, path: href('events', lang) }]);
+const eventsSchema = agenda.map((e) => ({
+  '@context': 'https://schema.org',
+  '@type': 'Event',
+  name: pick(e, 'titre', lang),
+  description: pick(e, 'texte', lang),
+  startDate: e.date,
+  eventStatus: 'https://schema.org/EventScheduled',
+  eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+  location: { '@id': new URL('/#etablissement', Astro.site!).href, '@type': 'Place', name: infos.nom, address: `${infos.adresse.rue}, ${infos.adresse.codePostal} ${infos.adresse.ville}` },
+}));
+---
+<Base lang={lang} route="events" title={c.title} description={c.description} schema={[crumbs, ...eventsSchema]} overlayHeader>
+  <PageHero image="evenement-salon-privatise.jpg" alt={fr ? 'Un salon privatisé, tables dressées pour un dîner de groupe' : 'A private lounge with tables set for a group dinner'} eyebrow={c.eyebrow} title={c.h1} intro={c.intro} />
+
+  <section class="py-24 md:py-32">
+    <div class="wrap">
+      <div class="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+        <Heading eyebrow={c.formatsEyebrow} title={c.formatsTitle} />
+        <a href="#devis" class="btn-primary self-start md:self-auto" data-reveal>{u.quote}</a>
+      </div>
+      <ol class="mt-14 border-t border-ivoire/10">
+        {evenements.formats.map((f, i) => (
+          <li class="grid gap-3 border-b border-ivoire/10 py-8 md:grid-cols-12 md:gap-8" data-reveal>
+            <span class="font-serif text-lg text-laiton italic md:col-span-1">{String(i + 1).padStart(2, '0')}</span>
+            <h3 class="font-serif text-3xl md:col-span-4">{pick(f, 'titre', lang)}</h3>
+            <p class="text-ivoire-mute md:col-span-5">{pick(f, 'texte', lang)}</p>
+            <p class="text-sm text-laiton md:col-span-2 md:text-right">{pick(f, 'capacite', lang)}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="bg-vert py-24 md:py-32">
+    <div class="wrap grid gap-12 lg:grid-cols-12">
+      <div class="lg:col-span-5">
+        <Heading eyebrow={c.spacesEyebrow} title={c.spacesTitle} />
+        <ul class="mt-10 divide-y divide-ivoire/15 border-y border-ivoire/15">
+          {evenements.espaces.map((s) => (
+            <li class="py-5" data-reveal>
+              <h3 class="font-serif text-2xl">{pick(s, 'nom', lang)}</h3>
+              <p class="mt-1 text-sm text-ivoire-mute">{pick(s, 'capacite', lang)}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div class="grid grid-cols-2 gap-4 lg:col-span-6 lg:col-start-7" data-reveal>
+        <div class="col-span-2 aspect-[3/2] overflow-hidden"><Photo src="salon-chesterfield-lumiere-tamisee.jpg" alt={fr ? 'Le salon de la cheminée et ses fauteuils Chesterfield' : 'The fireplace lounge and its Chesterfield armchairs'} sizes="(min-width: 1024px) 45vw, 100vw" /></div>
+        <div class="aspect-[4/5] overflow-hidden"><Photo src="evenement-afterwork-terrasse.jpg" alt={fr ? 'Un afterwork sur la terrasse couverte' : 'After-work drinks on the covered terrace'} sizes="(min-width: 1024px) 22vw, 50vw" /></div>
+        <div class="aspect-[4/5] overflow-hidden"><Photo src="terrasse-arboree-couverte.jpg" alt={fr ? 'La terrasse arborée' : 'The tree-lined terrace'} sizes="(min-width: 1024px) 22vw, 50vw" /></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-20 md:py-28">
+    <div class="wrap">
+      <p class="eyebrow mb-10" data-reveal>{c.stepsEyebrow}</p>
+      <ol class="grid gap-10 md:grid-cols-3">
+        {c.steps.map(([title, text], i) => (
+          <li data-reveal>
+            <span class="font-serif text-5xl text-laiton/70">{['I', 'II', 'III'][i]}</span>
+            <h3 class="mt-4 font-serif text-2xl">{title}</h3>
+            <p class="mt-2 text-ivoire-mute">{text}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  {agenda.length > 0 && (
+    <section class="border-t border-ivoire/10 py-20">
+      <div class="wrap">
+        <p class="eyebrow mb-8">{c.agenda}</p>
+        <ul class="divide-y divide-ivoire/10">
+          {agenda.map((e) => (
+            <li class="grid gap-2 py-5 sm:grid-cols-[12rem_1fr]">
+              <time datetime={e.date} class="font-serif text-xl text-laiton">{new Date(e.date + 'T12:00:00').toLocaleDateString(fr ? 'fr-FR' : 'en-GB', { weekday: 'long', day: 'numeric', month: 'long' })}</time>
+              <div><h3 class="font-serif text-2xl">{pick(e, 'titre', lang)}</h3><p class="mt-1 text-ivoire-mute">{pick(e, 'texte', lang)}</p></div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  <section id="devis" class="scroll-mt-20 border-t border-laiton/25 bg-vert-deep py-24 md:py-32">
+    <div class="wrap grid gap-14 lg:grid-cols-12">
+      <div class="lg:col-span-4">
+        <Heading eyebrow={c.formEyebrow} title={c.formTitle} />
+        <div class="mt-10 border-t border-ivoire/15 pt-6 text-sm text-ivoire-mute" data-reveal>
+          <p>{c.formAside}</p>
+          <a href={telHref} class="mt-2 inline-block font-serif text-3xl text-ivoire hover:text-laiton">{infos.telephone}</a>
+        </div>
+      </div>
+      <div class="lg:col-span-7 lg:col-start-6">
+        <QuoteForm lang={lang} />
+      </div>
+    </div>
+  </section>
+</Base>

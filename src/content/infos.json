@@ -1,0 +1,47 @@
+{
+  "_lisezMoi": "Informations générales du site. Modifiable via /admin ou directement ici. Les champs marqués TODO doivent être validés par Casa Pelletier avant la mise en ligne.",
+  "nom": "Casa Pelletier",
+  "telephone": "01 83 91 48 46",
+  "telephoneInternational": "+33183914846",
+  "email": "",
+  "_todoEmail": "TODO client : adresse e-mail publique (contact@casapelletier.fr ?)",
+  "adresse": {
+    "rue": "101 rue du Château",
+    "codePostal": "75014",
+    "ville": "Paris",
+    "pays": "FR"
+  },
+  "geo": { "latitude": 48.8358, "longitude": 2.3196 },
+  "_todoGeo": "TODO dev : vérifier les coordonnées exactes sur Google Maps (clic droit sur l'établissement).",
+  "metro": [
+    { "ligne": "13", "station": "Gaîté", "minutes": 5 },
+    { "ligne": "13", "station": "Pernety", "minutes": 5 }
+  ],
+  "acces_fr": "À dix minutes à pied de la gare Montparnasse.",
+  "acces_en": "A ten-minute walk from Gare Montparnasse.",
+  "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Casa+Pelletier+101+rue+du+Ch%C3%A2teau+75014+Paris",
+  "instagram": "casapelletier",
+  "reservationUrl": "",
+  "_todoReservation": "TODO client : outil de réservation en ligne (TheFork, Zenchef, Guestonline…). Coller ici l'URL : un bouton « Réserver en ligne » apparaîtra automatiquement à côté du téléphone.",
+  "formspreeId": "",
+  "_todoFormspree": "TODO dev : créer le formulaire sur formspree.io et coller l'identifiant (ex. xyzabcde). Sans identifiant, le formulaire de devis bascule sur un lien e-mail/téléphone.",
+  "avis": {
+    "tripadvisor": { "note": 4.8, "service": 4.9, "url": "https://www.tripadvisor.fr/" },
+    "google": { "note": 4.7, "url": "https://www.google.com/maps/search/?api=1&query=Casa+Pelletier+Paris" },
+    "_todoAvis": "TODO dev : remplacer les URL par les fiches exactes Tripadvisor et Google, et mettre les notes à jour.",
+    "motsCles_fr": ["une âme", "feutré", "accueil aux petits soins", "bons vivants et épicuriens"],
+    "motsCles_en": ["a soul", "hushed", "staff who look after you", "bons vivants"]
+  },
+  "horaires": [
+    { "jour": "monday", "ouvert": true, "creneaux": [{ "de": "12:00", "a": "14:30" }, { "de": "18:00", "a": "01:00" }] },
+    { "jour": "tuesday", "ouvert": true, "creneaux": [{ "de": "12:00", "a": "14:30" }, { "de": "18:00", "a": "01:00" }] },
+    { "jour": "wednesday", "ouvert": true, "creneaux": [{ "de": "12:00", "a": "14:30" }, { "de": "18:00", "a": "01:00" }] },
+    { "jour": "thursday", "ouvert": true, "creneaux": [{ "de": "12:00", "a": "14:30" }, { "de": "18:00", "a": "02:00" }] },
+    { "jour": "friday", "ouvert": true, "creneaux": [{ "de": "12:00", "a": "14:30" }, { "de": "18:00", "a": "02:00" }] },
+    { "jour": "saturday", "ouvert": true, "creneaux": [{ "de": "18:00", "a": "02:00" }] },
+    { "jour": "sunday", "ouvert": false, "creneaux": [] }
+  ],
+  "_todoHoraires": "TODO client : horaires PROVISOIRES, à confirmer (service midi, cuisine, bar, fermeture hebdomadaire). Ils alimentent aussi Google via schema.org.",
+  "noteHoraires_fr": "Cuisine jusqu'à 22 h 30. Le bar prend le relais ensuite.",
+  "noteHoraires_en": "Kitchen until 10.30pm. The bar takes over after that."
+}

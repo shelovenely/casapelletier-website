@@ -1,0 +1,167 @@
+# Decap CMS : permet à Casa Pelletier de modifier la carte, les horaires et les événements
+# sans toucher au code. Chaque enregistrement crée un commit Git, et Netlify republie le site (~1 min).
+locale: fr
+backend:
+  name: github
+  repo: shelovenely/casapelletier-website   # TODO dev : ajuster si le dépôt change de propriétaire
+  branch: main
+  commit_messages:
+    update: "Contenu : mise à jour de {{slug}}"
+media_folder: src/assets/images
+public_folder: /src/assets/images
+
+collections:
+  - name: contenus
+    label: Contenus du site
+    editor: { preview: false }
+    files:
+      - name: infos
+        label: "Horaires & informations"
+        file: src/content/infos.json
+        format: json
+        fields:
+          - { name: telephone, label: "Téléphone affiché", widget: string }
+          - { name: telephoneInternational, label: "Téléphone (format international, ex. +33183914846)", widget: string }
+          - { name: email, label: "E-mail public", widget: string, required: false }
+          - { name: reservationUrl, label: "Lien de réservation en ligne (laisser vide si aucun)", widget: string, required: false }
+          - { name: formspreeId, label: "Identifiant Formspree", widget: string, required: false }
+          - name: horaires
+            label: Horaires
+            widget: list
+            allow_add: false
+            allow_delete: false
+            summary: "{{fields.jour}}"
+            fields:
+              - { name: jour, label: Jour, widget: select, options: [{ label: Lundi, value: monday }, { label: Mardi, value: tuesday }, { label: Mercredi, value: wednesday }, { label: Jeudi, value: thursday }, { label: Vendredi, value: friday }, { label: Samedi, value: saturday }, { label: Dimanche, value: sunday }] }
+              - { name: ouvert, label: Ouvert, widget: boolean }
+              - name: creneaux
+                label: "Créneaux (HH:MM)"
+                widget: list
+                required: false
+                fields:
+                  - { name: de, label: "De", widget: string, pattern: ['^([01]\d|2[0-3]):[0-5]\d$', "Format HH:MM"] }
+                  - { name: a, label: "À", widget: string, pattern: ['^([01]\d|2[0-3]):[0-5]\d$', "Format HH:MM"] }
+          - { name: noteHoraires_fr, label: "Note sous les horaires (FR)", widget: string }
+          - { name: noteHoraires_en, label: "Note sous les horaires (EN)", widget: string }
+          - name: avis
+            label: Avis
+            widget: object
+            fields:
+              - { name: tripadvisor, label: Tripadvisor, widget: object, fields: [{ name: note, label: Note, widget: number, value_type: float }, { name: service, label: "Note service", widget: number, value_type: float }, { name: url, label: Lien, widget: string }] }
+              - { name: google, label: Google, widget: object, fields: [{ name: note, label: Note, widget: number, value_type: float }, { name: url, label: Lien, widget: string }] }
+              - { name: motsCles_fr, label: "Expressions des avis (FR)", widget: list }
+              - { name: motsCles_en, label: "Expressions des avis (EN)", widget: list }
+
+      - name: carte
+        label: "La carte du restaurant"
+        file: src/content/carte.json
+        format: json
+        fields:
+          - { name: miseAJour, label: "Mise à jour (AAAA-MM)", widget: string }
+          - name: sections
+            label: Rubriques
+            widget: list
+            summary: "{{fields.titre_fr}}"
+            fields:
+              - { name: titre_fr, label: "Titre (FR)", widget: string }
+              - { name: titre_en, label: "Titre (EN)", widget: string }
+              - name: plats
+                label: Plats
+                widget: list
+                summary: "{{fields.nom_fr}} — {{fields.prix}} €"
+                fields:
+                  - { name: nom_fr, label: "Nom (FR)", widget: string }
+                  - { name: nom_en, label: "Nom (EN)", widget: string }
+                  - { name: description_fr, label: "Description (FR)", widget: text, required: false }
+                  - { name: description_en, label: "Description (EN)", widget: text, required: false }
+                  - { name: prix, label: "Prix (€, chiffres seulement)", widget: string, pattern: ['^\d+([.,]\d{1,2})?$', "Chiffres uniquement, ex. 24 ou 24,50"] }
+                  - { name: signature, label: "Plat signature", widget: boolean, default: false }
+                  - { name: photo, label: "Photo (nom du fichier, plats signature)", widget: string, required: false }
+          - { name: note_fr, label: "Note de bas de carte (FR)", widget: string }
+          - { name: note_en, label: "Note de bas de carte (EN)", widget: string }
+
+      - name: bar
+        label: "Le bar"
+        file: src/content/bar.json
+        format: json
+        fields:
+          - name: familles
+            label: "Familles de spiritueux"
+            widget: list
+            summary: "{{fields.titre_fr}}"
+            fields:
+              - { name: titre_fr, label: "Titre (FR)", widget: string }
+              - { name: titre_en, label: "Titre (EN)", widget: string }
+              - { name: texte_fr, label: "Texte (FR)", widget: text }
+              - { name: texte_en, label: "Texte (EN)", widget: text }
+          - name: cocktails
+            label: Cocktails
+            widget: list
+            summary: "{{fields.nom}} — {{fields.prix}} €"
+            fields:
+              - { name: nom, label: Nom, widget: string }
+              - { name: composition_fr, label: "Composition (FR)", widget: string }
+              - { name: composition_en, label: "Composition (EN)", widget: string }
+              - { name: prix, label: "Prix (€)", widget: string }
+          - name: sansAlcool
+            label: "Sans alcool"
+            widget: list
+            summary: "{{fields.nom}} — {{fields.prix}} €"
+            fields:
+              - { name: nom, label: Nom, widget: string }
+              - { name: composition_fr, label: "Composition (FR)", widget: string }
+              - { name: composition_en, label: "Composition (EN)", widget: string }
+              - { name: prix, label: "Prix (€)", widget: string }
+
+      - name: evenements
+        label: "Événements & privatisation"
+        file: src/content/evenements.json
+        format: json
+        fields:
+          - { name: capaciteMax, label: "Capacité maximale", widget: number }
+          - name: agenda
+            label: "Agenda (soirées, rendez-vous)"
+            widget: list
+            summary: "{{fields.date}} — {{fields.titre_fr}}"
+            fields:
+              - { name: date, label: Date, widget: datetime, format: "YYYY-MM-DD", date_format: "DD/MM/YYYY", time_format: false }
+              - { name: publie, label: "Publié", widget: boolean, default: true }
+              - { name: titre_fr, label: "Titre (FR)", widget: string }
+              - { name: titre_en, label: "Titre (EN)", widget: string }
+              - { name: texte_fr, label: "Texte (FR)", widget: text }
+              - { name: texte_en, label: "Texte (EN)", widget: text }
+          - name: formats
+            label: Formats
+            widget: list
+            summary: "{{fields.titre_fr}}"
+            fields:
+              - { name: titre_fr, label: "Titre (FR)", widget: string }
+              - { name: titre_en, label: "Titre (EN)", widget: string }
+              - { name: capacite_fr, label: "Capacité (FR)", widget: string }
+              - { name: capacite_en, label: "Capacité (EN)", widget: string }
+              - { name: texte_fr, label: "Texte (FR)", widget: text }
+              - { name: texte_en, label: "Texte (EN)", widget: text }
+          - name: espaces
+            label: Espaces
+            widget: list
+            summary: "{{fields.nom_fr}}"
+            fields:
+              - { name: nom_fr, label: "Nom (FR)", widget: string }
+              - { name: nom_en, label: "Nom (EN)", widget: string }
+              - { name: capacite_fr, label: "Capacité (FR)", widget: string }
+              - { name: capacite_en, label: "Capacité (EN)", widget: string }
+
+      - name: faq
+        label: "Questions fréquentes"
+        file: src/content/faq.json
+        format: json
+        fields:
+          - name: questions
+            label: Questions
+            widget: list
+            summary: "{{fields.q_fr}}"
+            fields:
+              - { name: q_fr, label: "Question (FR)", widget: string }
+              - { name: q_en, label: "Question (EN)", widget: string }
+              - { name: r_fr, label: "Réponse (FR)", widget: text }
+              - { name: r_en, label: "Réponse (EN)", widget: text }

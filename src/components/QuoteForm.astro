@@ -1,0 +1,152 @@
+---
+/**
+ * Formulaire de demande de devis — envoyé à Formspree (identifiant dans src/content/infos.json).
+ * Fonctionne sans JavaScript (POST classique) ; avec JS, envoi en arrière-plan et message de confirmation.
+ */
+import { infos, telHref, evenements, pick } from '../lib/data';
+import { href, type Lang } from '../i18n/ui';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const fr = lang === 'fr';
+const id = infos.formspreeId.trim();
+const action = id ? `https://formspree.io/f/${id}` : '';
+const today = new Date().toISOString().slice(0, 10);
+
+const L = fr
+  ? {
+      type: "Type d'événement", date: 'Date souhaitée', guests: 'Nombre de personnes', budget: 'Budget par personne',
+      space: 'Espace', name: 'Nom et prénom', company: 'Société (facultatif)', email: 'E-mail', phone: 'Téléphone',
+      message: 'Votre projet', messagePh: 'Horaires, déroulé, contraintes particulières…', choose: 'Choisir…',
+      budgets: ['Moins de 40 €', '40 à 60 €', '60 à 90 €', 'Plus de 90 €', 'À définir ensemble'],
+      spaces: ['Pas de préférence', 'Un salon (privatisation partielle)', "Tout l'établissement (privatisation totale)"],
+      other: 'Autre',
+      consent: 'J’accepte que Casa Pelletier utilise ces informations pour répondre à ma demande. Elles ne sont ni revendues ni utilisées à d’autres fins.',
+      privacy: 'Politique de confidentialité', send: 'Envoyer la demande', sending: 'Envoi…',
+      ok: 'Merci. Votre demande est bien partie : nous revenons vers vous sous 48 heures.',
+      ko: 'L’envoi n’a pas abouti. Réessayez, ou appelez-nous au', required: 'Champs obligatoires',
+      fallback: 'Le formulaire en ligne arrive bientôt. En attendant, le plus rapide est de nous appeler :',
+      subject: 'Demande de devis — site Casa Pelletier',
+    }
+  : {
+      type: 'Type of event', date: 'Preferred date', guests: 'Number of guests', budget: 'Budget per person',
+      space: 'Space', name: 'Full name', company: 'Company (optional)', email: 'Email', phone: 'Phone',
+      message: 'Your plans', messagePh: 'Timing, schedule, specific requirements…', choose: 'Choose…',
+      budgets: ['Under €40', '€40 to €60', '€60 to €90', 'Over €90', 'To be discussed'],
+      spaces: ['No preference', 'One lounge (partial hire)', 'The whole venue (exclusive hire)'],
+      other: 'Other',
+      consent: 'I agree that Casa Pelletier may use this information to reply to my request. It is never sold or used for anything else.',
+      privacy: 'Privacy policy', send: 'Send request', sending: 'Sending…',
+      ok: 'Thank you. Your request is on its way: we will get back to you within 48 hours.',
+      ko: 'Something went wrong. Please try again, or call us on', required: 'Required fields',
+      fallback: 'Online requests are coming soon. In the meantime, the quickest way is to call us:',
+      subject: 'Quote request — Casa Pelletier website',
+    };
+const types = [...evenements.formats.map((f) => pick(f, 'titre', lang)), L.other];
+---
+{action || import.meta.env.DEV ? (
+  <form action={action || '#'} method="POST" class="grid gap-x-8 gap-y-7 sm:grid-cols-2" data-quote-form>
+    {!action && (
+      <p class="border border-cognac/60 p-3 text-xs text-ivoire-mute sm:col-span-2">
+        TODO (visible en dev uniquement) : renseigner « formspreeId » dans src/content/infos.json.
+      </p>
+    )}
+    <input type="hidden" name="_subject" value={L.subject} />
+    <input type="hidden" name="langue" value={lang} />
+    <div class="hidden" aria-hidden="true"><label>Ne pas remplir <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" /></label></div>
+
+    <div class="field">
+      <label for="q-type">{L.type} *</label>
+      <select id="q-type" name="type" required>
+        <option value="">{L.choose}</option>
+        {types.map((t) => <option>{t}</option>)}
+      </select>
+    </div>
+    <div class="field">
+      <label for="q-date">{L.date} *</label>
+      <input id="q-date" name="date" type="date" min={today} required />
+    </div>
+    <div class="field">
+      <label for="q-guests">{L.guests} *</label>
+      <input id="q-guests" name="personnes" type="number" inputmode="numeric" min="2" max={evenements.capaciteMax} required placeholder={`2 – ${evenements.capaciteMax}`} />
+    </div>
+    <div class="field">
+      <label for="q-budget">{L.budget}</label>
+      <select id="q-budget" name="budget">
+        <option value="">{L.choose}</option>
+        {L.budgets.map((b) => <option>{b}</option>)}
+      </select>
+    </div>
+    <div class="field sm:col-span-2">
+      <label for="q-space">{L.space}</label>
+      <select id="q-space" name="espace">
+        {L.spaces.map((s) => <option>{s}</option>)}
+      </select>
+    </div>
+    <div class="field">
+      <label for="q-name">{L.name} *</label>
+      <input id="q-name" name="nom" type="text" autocomplete="name" required />
+    </div>
+    <div class="field">
+      <label for="q-company">{L.company}</label>
+      <input id="q-company" name="societe" type="text" autocomplete="organization" />
+    </div>
+    <div class="field">
+      <label for="q-email">{L.email} *</label>
+      <input id="q-email" name="email" type="email" autocomplete="email" required />
+    </div>
+    <div class="field">
+      <label for="q-phone">{L.phone} *</label>
+      <input id="q-phone" name="telephone" type="tel" autocomplete="tel" required />
+    </div>
+    <div class="field sm:col-span-2">
+      <label for="q-message">{L.message}</label>
+      <textarea id="q-message" name="message" rows="4" placeholder={L.messagePh}></textarea>
+    </div>
+
+    <div class="flex items-start gap-3 text-sm text-ivoire-mute sm:col-span-2">
+      <input id="q-consent" name="consentement_rgpd" type="checkbox" value="oui" required class="mt-1 h-4 w-4 shrink-0 accent-laiton" />
+      <label for="q-consent">{L.consent} <a href={href('privacy', lang)} class="text-ivoire underline underline-offset-4">{L.privacy}</a>. *</label>
+    </div>
+
+    <div class="flex flex-col gap-4 sm:col-span-2 sm:flex-row sm:items-center sm:justify-between">
+      <p class="text-xs text-ivoire-mute">* {L.required}</p>
+      <button type="submit" class="btn-primary cursor-pointer disabled:opacity-60" data-label-sending={L.sending}>{L.send}</button>
+    </div>
+    <p class="hidden border-l-2 border-laiton py-2 pl-4 sm:col-span-2" role="status" tabindex="-1" data-ok>{L.ok}</p>
+    <p class="hidden border-l-2 border-cognac py-2 pl-4 sm:col-span-2" role="alert" data-ko>{L.ko} <a href={telHref} class="underline">{infos.telephone}</a>.</p>
+  </form>
+) : (
+  <div class="border border-laiton/40 p-8">
+    <p class="lead">{L.fallback}</p>
+    <a href={telHref} class="btn-primary mt-6">{infos.telephone}</a>
+    {infos.email && <p class="mt-4"><a href={`mailto:${infos.email}`} class="underline">{infos.email}</a></p>}
+  </div>
+)}
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('[data-quote-form]').forEach((form) => {
+    form.addEventListener('submit', async (e) => {
+      if (!form.action || form.getAttribute('action') === '#') { e.preventDefault(); return; }
+      e.preventDefault();
+      const btn = form.querySelector<HTMLButtonElement>('button[type=submit]')!;
+      const ok = form.querySelector<HTMLElement>('[data-ok]')!;
+      const ko = form.querySelector<HTMLElement>('[data-ko]')!;
+      const label = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = btn.dataset.labelSending ?? '…';
+      ok.classList.add('hidden'); ko.classList.add('hidden');
+      try {
+        const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
+        if (!res.ok) throw new Error(String(res.status));
+        form.reset();
+        ok.classList.remove('hidden');
+        ok.focus();
+      } catch {
+        ko.classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = label;
+      }
+    });
+  });
+</script>

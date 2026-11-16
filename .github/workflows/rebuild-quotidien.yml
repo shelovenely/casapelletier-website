@@ -1,0 +1,17 @@
+# Republie le site chaque nuit pour retirer de l'agenda les événements passés.
+# Prérequis : secret NETLIFY_BUILD_HOOK (Netlify → Site configuration → Build hooks).
+name: Rebuild quotidien
+on:
+  schedule:
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Déclencher le build Netlify
+        env:
+          HOOK: ${{ secrets.NETLIFY_BUILD_HOOK }}
+        run: |
+          if [ -z "$HOOK" ]; then echo "Secret NETLIFY_BUILD_HOOK absent, rien à faire."; exit 0; fi
+          curl -fsS -X POST -d '{}' "$HOOK"

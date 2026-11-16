@@ -1,0 +1,151 @@
+@import "tailwindcss";
+
+/* Polices auto-hébergées : pas d'appel à Google Fonts (RGPD + performance) */
+@import "@fontsource/cormorant-garamond/400.css";
+@import "@fontsource/cormorant-garamond/500.css";
+@import "@fontsource/cormorant-garamond/400-italic.css";
+@import "@fontsource-variable/jost/index.css";
+
+/* ------------------------------------------------------------------
+   Design tokens — voir docs/design-system.md
+   ------------------------------------------------------------------ */
+@theme {
+  --color-vert: #1f2e26;        /* vert anglais : fonds de sections */
+  --color-vert-deep: #17231d;
+  --color-tabac: #5a3a22;       /* brun tabac : fonds chauds, texte sur ivoire */
+  --color-cognac: #a9692e;      /* accents décoratifs, gros titres uniquement */
+  --color-cognac-dark: #8a5222; /* liens et petits textes sur fond ivoire (AA) */
+  --color-ivoire: #f3ebdd;      /* texte principal sur fond sombre, fond « carte » */
+  --color-ivoire-mute: #bfb6a6; /* texte secondaire sur fond sombre (AA) */
+  --color-noir: #141210;        /* noir chaud : fond par défaut */
+  --color-laiton: #b89a5b;      /* laiton : filets, surtitres, bouton principal */
+
+  --font-serif: "Cormorant Garamond", "Iowan Old Style", Georgia, serif;
+  --font-sans: "Jost Variable", "Jost", ui-sans-serif, system-ui, sans-serif;
+
+  --ease-slow: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --container-prose: 38rem;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+  body {
+    @apply bg-noir text-ivoire font-sans antialiased;
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    font-weight: 350;
+  }
+  h1, h2, h3, h4 {
+    @apply font-serif;
+    font-weight: 400;
+    line-height: 1.08;
+    letter-spacing: -0.005em;
+    text-wrap: balance;
+  }
+  p { text-wrap: pretty; }
+  ::selection { background: var(--color-laiton); color: var(--color-noir); }
+  :focus-visible {
+    outline: 2px solid var(--color-laiton);
+    outline-offset: 3px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .wrap { @apply mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-12; }
+
+  /* Surtitre en petites capitales */
+  .eyebrow {
+    @apply font-sans text-[0.72rem] uppercase text-laiton;
+    letter-spacing: 0.24em;
+    font-weight: 450;
+  }
+
+  .display { @apply font-serif text-[2.6rem] leading-[1.02] sm:text-6xl lg:text-7xl; }
+  .h-section { @apply font-serif text-[2.1rem] sm:text-5xl; }
+  .lead { @apply text-lg leading-relaxed text-ivoire-mute sm:text-xl; }
+
+  /* Filet laiton avec losange central, motif récurrent du site */
+  .rule {
+    @apply flex items-center gap-3 text-laiton;
+  }
+  .rule::before, .rule::after {
+    content: "";
+    @apply h-px flex-1 bg-current opacity-50;
+  }
+
+  .btn, .btn-primary, .btn-ghost, .btn-dark {
+    @apply inline-flex min-h-12 items-center justify-center gap-2.5 px-6 text-[0.8rem] uppercase transition-colors duration-500;
+    letter-spacing: 0.18em;
+    font-weight: 450;
+  }
+  .btn-primary { @apply bg-laiton text-noir hover:bg-ivoire; }
+  .btn-ghost { @apply border border-ivoire/40 text-ivoire hover:border-laiton hover:text-laiton; }
+  .btn-dark { @apply bg-noir text-ivoire hover:bg-tabac; }
+
+  .link-underline {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.6s var(--ease-slow);
+  }
+  .link-underline:hover, .link-underline:focus-visible { background-size: 100% 1px; }
+
+  /* Fond « papier » pour la carte et les pages légales */
+  .paper { @apply bg-ivoire text-noir; }
+  .paper .eyebrow { @apply text-cognac-dark; }
+  .paper .lead { @apply text-tabac; }
+
+  .prose-legal { @apply max-w-(--container-prose) space-y-4; }
+  .prose-legal h2 { @apply pt-8 text-3xl; }
+  .prose-legal h3 { @apply pt-4 text-xl font-sans font-medium; }
+  .prose-legal a { @apply text-cognac-dark underline underline-offset-4; }
+  .prose-legal ul { @apply list-disc space-y-1 pl-5; }
+
+  .field label { @apply mb-1.5 block text-[0.72rem] uppercase text-ivoire-mute; letter-spacing: 0.18em; }
+  .field input, .field select, .field textarea {
+    @apply w-full rounded-none border-0 border-b border-ivoire/30 bg-transparent px-0 py-2.5 text-ivoire transition-colors duration-300 placeholder:text-ivoire/35 focus:border-laiton focus:ring-0 focus:outline-none;
+  }
+  .field select option { @apply bg-noir text-ivoire; }
+}
+
+/* ------------------------------------------------------------------
+   Animations lentes et discrètes
+   ------------------------------------------------------------------ */
+@keyframes slow-zoom {
+  from { transform: scale(1.08); }
+  to { transform: scale(1); }
+}
+.kenburns { animation: slow-zoom 14s var(--ease-slow) both; }
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+.fade-up { animation: fade-up 1.4s var(--ease-slow) both; }
+.delay-1 { animation-delay: 0.25s; }
+.delay-2 { animation-delay: 0.5s; }
+.delay-3 { animation-delay: 0.75s; }
+
+/* Apparition au défilement (activée seulement si JS est disponible) */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 1.2s var(--ease-slow), transform 1.2s var(--ease-slow);
+}
+.js [data-reveal].is-visible { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal] { opacity: 1; transform: none; }
+}

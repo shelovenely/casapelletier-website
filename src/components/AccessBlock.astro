@@ -1,0 +1,45 @@
+---
+import MapEmbed from './MapEmbed.astro';
+import HoursList from './HoursList.astro';
+import { t, href, type Lang } from '../i18n/ui';
+import { infos, telHref, pick } from '../lib/data';
+interface Props { lang: Lang; withLink?: boolean }
+const { lang, withLink = true } = Astro.props;
+const u = t(lang);
+---
+<section class="bg-noir py-20 md:py-28" aria-labelledby="acces-titre">
+  <div class="wrap grid gap-12 lg:grid-cols-12 lg:gap-16">
+    <div class="lg:col-span-5" data-reveal>
+      <p class="eyebrow mb-5">{lang === 'fr' ? 'Nous trouver' : 'Find us'}</p>
+      <h2 id="acces-titre" class="h-section">{lang === 'fr' ? 'Rue du Château, entre Gaîté et Pernety.' : 'Rue du Château, between Gaîté and Pernety.'}</h2>
+
+      <div class="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-1">
+        <div>
+          <h3 class="eyebrow mb-3 text-ivoire-mute">{u.address}</h3>
+          <address class="not-italic text-lg leading-snug">
+            {infos.adresse.rue}<br />{infos.adresse.codePostal} {infos.adresse.ville}
+          </address>
+          <ul class="mt-4 space-y-1.5 text-sm text-ivoire-mute">
+            {infos.metro.map((m) => (
+              <li class="flex items-center gap-3">
+                <span class="inline-flex h-6 w-6 items-center justify-center rounded-full border border-laiton/60 text-[0.7rem] text-laiton" aria-label={`${u.metro} ${m.ligne}`}>{m.ligne}</span>
+                {m.station} · {m.minutes} {u.minWalk}
+              </li>
+            ))}
+            <li class="pt-1">{pick(infos, 'acces', lang)}</li>
+          </ul>
+          <a href={infos.googleMapsUrl} class="link-underline mt-5 inline-block text-sm text-laiton" rel="noopener" target="_blank">{u.itinerary} →</a>
+        </div>
+        <div>
+          <h3 class="eyebrow mb-3 text-ivoire-mute">{u.hours}</h3>
+          <HoursList lang={lang} class="text-sm" />
+          <p class="mt-4 text-sm"><a href={telHref} class="text-ivoire hover:text-laiton">{infos.telephone}</a></p>
+          {withLink && <a href={href('infos', lang)} class="link-underline mt-3 inline-block text-sm text-laiton">{lang === 'fr' ? 'Toutes les infos pratiques' : 'All practical information'} →</a>}
+        </div>
+      </div>
+    </div>
+    <div class="lg:col-span-7" data-reveal>
+      <MapEmbed lang={lang} class="h-full" />
+    </div>
+  </div>
+</section>

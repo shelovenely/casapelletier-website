@@ -1,0 +1,25 @@
+---
+import { infos, JOURS } from '../lib/data';
+import { t, formatHeure, type Lang } from '../i18n/ui';
+interface Props { lang: Lang; class?: string; compact?: boolean }
+const { lang, class: cls = '', compact = false } = Astro.props;
+const u = t(lang);
+const byDay = Object.fromEntries(infos.horaires.map((d) => [d.jour, d]));
+const fmt = (d: (typeof infos.horaires)[number]) =>
+  d.ouvert && d.creneaux.length
+    ? d.creneaux.map((c) => `${formatHeure(c.de, lang)} – ${formatHeure(c.a, lang)}`).join(' · ')
+    : u.closed;
+---
+<dl class:list={['divide-y divide-current/10', cls]} data-hours>
+  {JOURS.map((j) => (
+    <div class:list={['flex justify-between gap-4', compact ? 'py-1.5' : 'py-2.5']} data-day={j}>
+      <dt>{u.days[j]}</dt>
+      <dd class:list={['text-right tabular-nums', !byDay[j]?.ouvert && 'italic']}>{fmt(byDay[j])}</dd>
+    </div>
+  ))}
+</dl>
+<script>
+  // Met en évidence le jour courant (heure de Paris)
+  const day = new Intl.DateTimeFormat('en-GB', { weekday: 'long', timeZone: 'Europe/Paris' }).format(new Date()).toLowerCase();
+  document.querySelectorAll(`[data-hours] [data-day="${day}"]`).forEach((el) => el.classList.add('font-medium'));
+</script>

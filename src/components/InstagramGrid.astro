@@ -1,0 +1,37 @@
+---
+/**
+ * Grille Instagram statique (aucun script tiers, aucun cookie).
+ * TODO : remplacer instagram-01.jpg … instagram-06.jpg par des captures du feed @casapelletier
+ * et mettre à jour les textes alternatifs ci-dessous.
+ */
+import Photo from './ui/Photo.astro';
+import { infos, instagramUrl } from '../lib/data';
+import type { Lang } from '../i18n/ui';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const alts = lang === 'fr'
+  ? ['Le salon au coin du feu', 'Côte de bœuf tranchée en salle', 'Le comptoir du bar', 'La terrasse sous les arbres', 'Verres alignés sur le bar', 'Une table dressée pour le dîner']
+  : ['The lounge by the fire', 'Rib of beef carved at the table', 'The bar counter', 'The terrace under the trees', 'Glasses lined up on the bar', 'A table set for dinner'];
+---
+<section class="bg-noir py-20 md:py-28" aria-labelledby="insta-titre">
+  <div class="wrap">
+    <div class="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end" data-reveal>
+      <div>
+        <p class="eyebrow mb-4">Instagram</p>
+        <h2 id="insta-titre" class="h-section">@{infos.instagram}</h2>
+      </div>
+      <a href={instagramUrl} class="btn-ghost self-start sm:self-auto" rel="noopener" target="_blank">
+        {lang === 'fr' ? 'Voir le compte' : 'See the account'}<span class="sr-only"> ({lang === 'fr' ? 'nouvel onglet' : 'new tab'})</span>
+      </a>
+    </div>
+    <ul class="grid grid-cols-3 gap-1.5 sm:gap-3" data-reveal>
+      {alts.map((alt, i) => (
+        <li class="aspect-square overflow-hidden">
+          <a href={instagramUrl} rel="noopener" target="_blank" class="block h-full transition-opacity duration-700 hover:opacity-80" tabindex="-1">
+            <Photo src={`instagram-0${i + 1}.jpg`} alt={alt} sizes="(min-width: 1280px) 400px, 33vw" widths={[240, 400, 640, 900]} />
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

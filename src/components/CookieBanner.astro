@@ -1,0 +1,40 @@
+---
+/**
+ * Bandeau de consentement (RGPD / recommandations CNIL).
+ * Le site ne dépose aucun traceur publicitaire ni de mesure d'audience.
+ * Seul contenu soumis à consentement : la carte Google Maps intégrée.
+ * Choix stocké 6 mois dans localStorage (clé « cp-consent »). « Refuser » est aussi visible qu'« Accepter ».
+ */
+import { t, href, type Lang } from '../i18n/ui';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const u = t(lang);
+const txt = lang === 'fr'
+  ? { title: 'Cookies', body: "Nous n'utilisons ni publicité ni mesure d'audience. Seule la carte Google Maps dépose des cookies, et seulement si vous l'acceptez.", accept: 'Accepter', refuse: 'Refuser', more: 'Notre politique cookies' }
+  : { title: 'Cookies', body: 'We use no advertising or analytics. Only the embedded Google Map sets cookies, and only if you accept.', accept: 'Accept', refuse: 'Decline', more: 'Our cookie policy' };
+---
+<div
+  id="cookie-banner"
+  role="dialog"
+  aria-live="polite"
+  aria-labelledby="cookie-title"
+  hidden
+  class="fixed inset-x-3 bottom-20 z-[60] mx-auto max-w-xl border border-laiton/40 bg-noir p-5 text-sm shadow-2xl shadow-black/60 md:bottom-6"
+>
+  <p id="cookie-title" class="eyebrow mb-2">{txt.title}</p>
+  <p class="text-ivoire-mute">{txt.body} <a href={href('cookies', lang)} class="text-ivoire underline underline-offset-4">{txt.more}</a></p>
+  <div class="mt-4 grid grid-cols-2 gap-3">
+    <button type="button" class="btn-ghost min-h-11 cursor-pointer" data-consent="refuse">{txt.refuse}</button>
+    <button type="button" class="btn-primary min-h-11 cursor-pointer" data-consent="accept">{txt.accept}</button>
+  </div>
+</div>
+
+<script>
+  import { getConsent, setConsent } from '../lib/consent';
+  const banner = document.getElementById('cookie-banner')!;
+  if (getConsent() === null) banner.hidden = false;
+  banner.querySelectorAll<HTMLButtonElement>('[data-consent]').forEach((b) =>
+    b.addEventListener('click', () => { setConsent(b.dataset.consent === 'accept'); banner.hidden = true; }),
+  );
+  document.querySelectorAll('[data-cookie-open]').forEach((b) => b.addEventListener('click', () => { banner.hidden = false; }));
+</script>

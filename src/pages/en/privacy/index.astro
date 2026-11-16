@@ -1,0 +1,18 @@
+---
+import Legal from '../../../components/pages/Legal.astro';
+import { infos } from '../../../lib/data';
+const contact = infos.email || infos.telephone;
+---
+<Legal lang="en" route="privacy" title="Privacy policy · Casa Pelletier" description="How Casa Pelletier collects and uses your personal data, and how to exercise your rights (GDPR)." h1="Privacy policy" updated="Last updated: November 2026">
+  <p>The French version of this page is the authoritative one: <a href="/confidentialite/">Politique de confidentialité</a>.</p>
+  <h2>Quote request form</h2>
+  <ul>
+    <li><strong>Data</strong>: name, company (optional), email, phone, event date and type, number of guests, budget, message.</li>
+    <li><strong>Purpose</strong>: replying to your request and preparing a quote.</li>
+    <li><strong>Legal basis</strong>: your consent and pre-contractual steps taken at your request (GDPR art. 6.1.a and 6.1.b).</li>
+    <li><strong>Retention</strong>: 3 years after our last exchange.</li>
+    <li><strong>Processors</strong>: Formspree (form delivery, USA, standard contractual clauses), Netlify (hosting, USA).</li>
+  </ul>
+  <h2>Your rights</h2>
+  <p>You may access, correct, erase, restrict, object to or port your data, and withdraw your consent at any time. Contact: {contact}. You may also lodge a complaint with the CNIL (<a href="https://www.cnil.fr" rel="noopener">www.cnil.fr</a>).</p>
+</Legal>

@@ -1,0 +1,36 @@
+---
+import Legal from '../../components/pages/Legal.astro';
+import { infos, adresseLigne } from '../../lib/data';
+---
+<Legal lang="fr" route="legal" title="Mentions légales · Casa Pelletier" description="Mentions légales du site casapelletier.fr : éditeur, hébergeur, propriété intellectuelle." h1="Mentions légales" updated="Dernière mise à jour : novembre 2026">
+  <h2>Éditeur du site</h2>
+  <p>
+    <!-- TODO client : raison sociale, forme juridique, capital, RCS, SIRET, TVA intracommunautaire, directeur de la publication -->
+    [Raison sociale] — [forme juridique] au capital de [montant] €<br />
+    Siège : {adresseLigne}<br />
+    RCS Paris [numéro] · SIRET [numéro] · TVA [numéro]<br />
+    Téléphone : {infos.telephone}{infos.email && <> · E-mail : <a href={`mailto:${infos.email}`}>{infos.email}</a></>}<br />
+    Directeur de la publication : [nom]
+  </p>
+  <p>Licence de débit de boissons : [catégorie et numéro de licence].</p>
+
+  <h2>Hébergement</h2>
+  <p>
+    <!-- TODO dev : vérifier l'adresse de l'hébergeur retenu (Netlify ou Vercel) au moment de la mise en ligne -->
+    Netlify, Inc. — 512 2nd Street, Suite 200, San Francisco, CA 94107, États-Unis — <a href="https://www.netlify.com" rel="noopener">www.netlify.com</a>
+  </p>
+
+  <h2>Propriété intellectuelle</h2>
+  <p>L'ensemble des textes, photographies et éléments graphiques de ce site est la propriété de Casa Pelletier ou de leurs auteurs respectifs. Toute reproduction sans autorisation écrite est interdite.</p>
+  <p>Crédits photos : [à compléter].</p>
+
+  <h2>Alcool et tabac</h2>
+  <p>L'abus d'alcool est dangereux pour la santé, à consommer avec modération. La vente d'alcool aux mineurs est interdite.</p>
+  <p>Fumer nuit gravement à votre santé et à celle de votre entourage. Ce site ne fait la promotion d'aucun produit du tabac ; les informations relatives au fumoir sont fournies à titre purement informatif.</p>
+
+  <h2>Responsabilité</h2>
+  <p>Les horaires, la carte et les prix sont donnés à titre indicatif et peuvent évoluer. En cas de doute, appelez-nous au {infos.telephone}.</p>
+
+  <h2>Données personnelles</h2>
+  <p>Voir notre <a href="/confidentialite/">politique de confidentialité</a> et notre <a href="/cookies/">politique cookies</a>.</p>
+</Legal>

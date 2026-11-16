@@ -1,0 +1,115 @@
+---
+import Logo from './Logo.astro';
+import { NAV, ROUTES, t, href, type Lang, type RouteKey } from '../i18n/ui';
+import { infos, telHref } from '../lib/data';
+
+interface Props { lang: Lang; route: RouteKey | null; overlay?: boolean }
+const { lang, route, overlay = false } = Astro.props;
+const u = t(lang);
+const other: Lang = lang === 'fr' ? 'en' : 'fr';
+const otherHref = route ? ROUTES[route][other] : ROUTES.home[other];
+---
+
+<header
+  id="site-header"
+  data-overlay={overlay ? 'true' : 'false'}
+  class:list={[
+    'fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-700',
+    overlay ? 'border-b border-transparent' : 'border-b border-ivoire/10 bg-noir/95 backdrop-blur',
+  ]}
+>
+  <div class="wrap flex h-18 items-center justify-between gap-6">
+    <a href={href('home', lang)} class="shrink-0">
+      <Logo />
+    </a>
+
+    <nav aria-label={lang === 'fr' ? 'Navigation principale' : 'Main navigation'} class="hidden lg:block">
+      <ul class="flex items-center gap-7 text-[0.78rem] uppercase tracking-[0.16em]">
+        {NAV.map((k) => (
+          <li>
+            <a
+              href={href(k, lang)}
+              class:list={['link-underline py-1 transition-colors duration-300 hover:text-laiton', route === k ? 'text-laiton' : 'text-ivoire']}
+              aria-current={route === k ? 'page' : undefined}
+            >{u.nav[k]}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-4">
+      <a href={otherHref} hreflang={other} lang={other} class="hidden text-[0.72rem] uppercase tracking-[0.2em] text-ivoire-mute hover:text-laiton sm:inline" aria-label={u.switchLangLabel}>
+        {other.toUpperCase()}
+      </a>
+      <a href={telHref} class="btn-primary hidden min-h-10 px-5 md:inline-flex" data-track="tel-header">
+        {u.book}<span class="sr-only">, {infos.telephone}</span>
+      </a>
+      <button
+        type="button"
+        class="-mr-2 inline-flex h-11 w-11 items-center justify-center lg:hidden"
+        aria-expanded="false"
+        aria-controls="menu-mobile"
+        data-menu-toggle
+      >
+        <span class="sr-only">{u.menu}</span>
+        <span aria-hidden="true" class="relative block h-3 w-6">
+          <span class="absolute inset-x-0 top-0 h-px bg-current transition-transform duration-500" data-bar="1"></span>
+          <span class="absolute inset-x-0 bottom-0 h-px bg-current transition-transform duration-500" data-bar="2"></span>
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Menu plein écran (mobile / tablette) -->
+  <div id="menu-mobile" class="invisible fixed inset-0 top-18 z-40 bg-noir opacity-0 transition-[opacity,visibility] duration-500 lg:hidden" data-menu-panel>
+    <nav aria-label={lang === 'fr' ? 'Navigation mobile' : 'Mobile navigation'} class="wrap flex h-full flex-col justify-between pt-10 pb-28">
+      <ul class="space-y-1">
+        <li><a href={href('home', lang)} class="block py-2 font-serif text-4xl">{u.nav.home}</a></li>
+        {NAV.map((k, i) => (
+          <li>
+            <a href={href(k, lang)} class:list={['flex items-baseline gap-4 py-2 font-serif text-4xl', route === k && 'text-laiton']} aria-current={route === k ? 'page' : undefined}>
+              <span class="w-6 font-sans text-xs text-laiton">{['I', 'II', 'III', 'IV', 'V'][i]}</span>{u.nav[k]}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <div class="space-y-4 border-t border-ivoire/15 pt-6 text-sm text-ivoire-mute">
+        <p>{infos.adresse.rue}, {infos.adresse.codePostal} Paris</p>
+        <a href={otherHref} hreflang={other} lang={other} class="inline-block uppercase tracking-[0.2em] text-ivoire">{u.switchLang}</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const header = document.getElementById('site-header')!;
+  const toggle = header.querySelector<HTMLButtonElement>('[data-menu-toggle]')!;
+  const panel = header.querySelector<HTMLElement>('[data-menu-panel]')!;
+  const bars = toggle.querySelectorAll<HTMLElement>('[data-bar]');
+  const overlay = header.dataset.overlay === 'true';
+
+  const solid = (on: boolean) => {
+    header.classList.toggle('bg-noir/95', on);
+    header.classList.toggle('backdrop-blur', on);
+    header.classList.toggle('border-ivoire/10', on);
+    header.classList.toggle('border-transparent', !on);
+  };
+
+  const setOpen = (open: boolean) => {
+    toggle.setAttribute('aria-expanded', String(open));
+    panel.classList.toggle('invisible', !open);
+    panel.classList.toggle('opacity-0', !open);
+    document.body.style.overflow = open ? 'hidden' : '';
+    bars[0].style.transform = open ? 'translateY(5.5px) rotate(45deg)' : '';
+    bars[1].style.transform = open ? 'translateY(-5.5px) rotate(-45deg)' : '';
+    if (overlay) solid(open || window.scrollY > 40);
+  };
+  toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
+
+  if (overlay) {
+    const onScroll = () => solid(window.scrollY > 40 || toggle.getAttribute('aria-expanded') === 'true');
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+</script>

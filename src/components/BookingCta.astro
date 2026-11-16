@@ -1,0 +1,22 @@
+---
+import Ornament from './ui/Ornament.astro';
+import { t, href, type Lang } from '../i18n/ui';
+import { infos, telHref } from '../lib/data';
+interface Props { lang: Lang; title?: string; text?: string }
+const { lang } = Astro.props;
+const u = t(lang);
+const title = Astro.props.title ?? (lang === 'fr' ? 'Une table, ce soir ?' : 'A table tonight?');
+const text = Astro.props.text ?? (lang === 'fr' ? 'Le plus simple reste de nous appeler. On vous répond, on vous place.' : 'The simplest way is to call. We pick up, and we find you a seat.');
+---
+<section class="bg-vert py-20 md:py-28">
+  <div class="wrap text-center" data-reveal>
+    <Ornament class="mx-auto mb-10 max-w-xs" />
+    <h2 class="h-section">{title}</h2>
+    <p class="lead mx-auto mt-5 max-w-lg">{text}</p>
+    <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+      <a href={telHref} class="btn-primary w-full sm:w-auto" data-track="tel-cta">{u.call} · {infos.telephone}</a>
+      {infos.reservationUrl && <a href={infos.reservationUrl} class="btn-ghost w-full sm:w-auto" rel="noopener">{u.bookOnline}</a>}
+      <a href={href('events', lang) + '#devis'} class="btn-ghost w-full sm:w-auto">{u.privatise}</a>
+    </div>
+  </div>
+</section>

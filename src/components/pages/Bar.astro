@@ -1,0 +1,123 @@
+---
+/** Loi Évin : informations objectives (origine, composition, prix). Pas d'incitation, pas de superlatifs. */
+import Base from '../../layouts/Base.astro';
+import PageHero from '../PageHero.astro';
+import Photo from '../ui/Photo.astro';
+import Heading from '../ui/Heading.astro';
+import BookingCta from '../BookingCta.astro';
+import { t, href, type Lang } from '../../i18n/ui';
+import { bar, pick } from '../../lib/data';
+import { breadcrumbSchema } from '../../lib/schema';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const u = t(lang);
+const fr = lang === 'fr';
+const euro = (p: string) => (fr ? `${p.replace('.', ',')} €` : `€${p.replace(',', '.')}`);
+
+const c = fr
+  ? {
+      title: 'Le Bar · Bar à rhum et whisky à Paris 14 · Casa Pelletier',
+      description: 'Bar à rhum et whisky près de Montparnasse : rhums agricoles et de tradition anglaise, whiskies d’Écosse et d’ailleurs, cocktails maison. Casa Pelletier, Paris 14e.',
+      eyebrow: 'II. Le Bar',
+      h1: 'Rhums, whiskies<br /><em>et quelques classiques.</em>',
+      intro: 'Un comptoir en bois sombre, des étagères qui montent haut, et une équipe qui connaît chaque bouteille.',
+      aboutTitle: 'Une cave choisie bouteille par bouteille.',
+      about: [
+        'La sélection change au fil des arrivages. Plutôt que de tout lister ici, on préfère vous présenter les familles. La carte complète vous attend au bar.',
+        'Vous hésitez ? Dites-nous ce que vous aimez d’habitude, on vous oriente.',
+      ],
+      famEyebrow: 'Au comptoir',
+      famTitle: 'Les spiritueux',
+      cocktailsEyebrow: 'Cocktails maison',
+      cocktailsTitle: 'Les cocktails',
+      softTitle: 'Sans alcool',
+      priceNote: 'Prix nets, service compris.',
+    }
+  : {
+      title: 'The Bar · Rum and whisky bar in Paris 14th · Casa Pelletier',
+      description: 'Rum and whisky bar near Montparnasse: agricole and British-style rums, Scotch and world whiskies, house cocktails. Casa Pelletier, Paris 14th.',
+      eyebrow: 'II. The Bar',
+      h1: 'Rums, whiskies<br /><em>and a few classics.</em>',
+      intro: 'A dark wood counter, shelves that reach the ceiling, and a team that knows every bottle.',
+      aboutTitle: 'A cellar built one bottle at a time.',
+      about: [
+        'The selection changes with each delivery. Rather than list everything here, we would rather introduce the families. The full list is waiting at the bar.',
+        'Not sure? Tell us what you usually enjoy and we will point you in the right direction.',
+      ],
+      famEyebrow: 'At the counter',
+      famTitle: 'Spirits',
+      cocktailsEyebrow: 'House cocktails',
+      cocktailsTitle: 'Cocktails',
+      softTitle: 'Alcohol-free',
+      priceNote: 'Prices include service.',
+    };
+const crumbs = breadcrumbSchema(Astro.site!, [{ name: u.nav.home, path: href('home', lang) }, { name: u.nav.bar, path: href('bar', lang) }]);
+---
+<Base lang={lang} route="bar" title={c.title} description={c.description} schema={[crumbs]} overlayHeader>
+  <PageHero image="bar-comptoir-bois-sombre.jpg" alt={fr ? 'Le comptoir du bar en bois sombre et ses appliques en laiton' : 'The dark wood bar counter and its brass lamps'} eyebrow={c.eyebrow} title={c.h1} intro={c.intro} />
+
+  <section class="py-24 md:py-32">
+    <div class="wrap grid items-center gap-12 md:grid-cols-12">
+      <div class="md:col-span-5" data-reveal>
+        <h2 class="h-section">{c.aboutTitle}</h2>
+        <div class="mt-6 space-y-5 text-ivoire-mute">{c.about.map((p) => <p>{p}</p>)}</div>
+      </div>
+      <div class="aspect-[4/5] overflow-hidden md:col-span-6 md:col-start-7" data-reveal>
+        <Photo src="bar-etagere-rhums-whiskies.jpg" alt={fr ? 'Étagère de rhums et de whiskies derrière le comptoir' : 'Shelves of rums and whiskies behind the counter'} sizes="(min-width: 768px) 50vw, 100vw" />
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-vert py-24 md:py-32">
+    <div class="wrap">
+      <Heading eyebrow={c.famEyebrow} title={c.famTitle} />
+      <dl class="mt-14 grid gap-x-12 gap-y-10 border-t border-ivoire/15 pt-10 md:grid-cols-2">
+        {bar.familles.map((f) => (
+          <div data-reveal>
+            <dt class="font-serif text-3xl">{pick(f, 'titre', lang)}</dt>
+            <dd class="mt-3 text-ivoire-mute">{pick(f, 'texte', lang)}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <section class="py-24 md:py-32">
+    <div class="wrap grid gap-14 lg:grid-cols-12">
+      <div class="lg:col-span-7">
+        <Heading eyebrow={c.cocktailsEyebrow} title={c.cocktailsTitle} />
+        <ul class="mt-12 divide-y divide-ivoire/10 border-y border-ivoire/10">
+          {bar.cocktails.map((d) => (
+            <li class="flex items-baseline justify-between gap-6 py-5" data-reveal>
+              <div>
+                <h3 class="font-serif text-2xl">{d.nom}</h3>
+                <p class="mt-1 text-sm text-ivoire-mute">{pick(d, 'composition', lang)}</p>
+              </div>
+              <span class="font-serif text-xl tabular-nums text-laiton">{euro(d.prix)}</span>
+            </li>
+          ))}
+        </ul>
+        <h3 class="eyebrow mt-14">{c.softTitle}</h3>
+        <ul class="mt-4 divide-y divide-ivoire/10 border-b border-ivoire/10">
+          {bar.sansAlcool.map((d) => (
+            <li class="flex items-baseline justify-between gap-6 py-4">
+              <div>
+                <p class="font-serif text-xl">{d.nom}</p>
+                <p class="mt-1 text-sm text-ivoire-mute">{pick(d, 'composition', lang)}</p>
+              </div>
+              <span class="font-serif text-lg tabular-nums">{euro(d.prix)}</span>
+            </li>
+          ))}
+        </ul>
+        <p class="mt-6 text-xs text-ivoire-mute">{c.priceNote}</p>
+        <p class="mt-2 text-xs text-ivoire/80">{u.alcohol}</p>
+      </div>
+      <div class="hidden aspect-[3/4] self-start overflow-hidden lg:sticky lg:top-28 lg:col-span-4 lg:col-start-9 lg:block" data-reveal>
+        <Photo src="bar-cocktail-maison.jpg" alt={fr ? 'Un cocktail maison posé sur le comptoir' : 'A house cocktail on the bar counter'} sizes="33vw" />
+      </div>
+    </div>
+  </section>
+
+  <BookingCta lang={lang} />
+</Base>

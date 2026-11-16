@@ -1,0 +1,17 @@
+---
+/** Bandeau d'en-tête des pages intérieures : photo pleine largeur, titre en bas à gauche. */
+import Photo from './ui/Photo.astro';
+interface Props { image: string; alt: string; eyebrow: string; title: string; intro?: string }
+const { image, alt, eyebrow, title, intro } = Astro.props;
+---
+<section class="relative isolate flex min-h-[78svh] items-end overflow-hidden md:min-h-[72vh]">
+  <div class="absolute inset-0 -z-10">
+    <Photo src={image} alt={alt} eager sizes="100vw" imgClass="kenburns" />
+    <div class="absolute inset-0 bg-gradient-to-t from-noir via-noir/55 to-noir/20"></div>
+  </div>
+  <div class="wrap pt-36 pb-24 md:pb-20">
+    <p class="eyebrow fade-up">{eyebrow}</p>
+    <h1 class="display fade-up delay-1 mt-5 max-w-4xl" set:html={title} />
+    {intro && <p class="lead fade-up delay-2 mt-6 max-w-xl">{intro}</p>}
+  </div>
+</section>

@@ -1,0 +1,140 @@
+{
+  "_lisezMoi": "La carte du restaurant. Prix en euros, sans le symbole. « signature » : true met le plat en avant. TODO client : valider plats, descriptions et prix (carte rédigée à titre d'exemple). « photo » : nom d'un fichier de src/assets/images (facultatif, utilisé pour les plats signature).",
+  "miseAJour": "2026-11",
+  "sections": [
+    {
+      "titre_fr": "Pour commencer",
+      "titre_en": "To start",
+      "plats": [
+        {
+          "nom_fr": "Œuf parfait, crème de champignons, noisettes torréfiées",
+          "nom_en": "Slow-cooked egg, mushroom cream, roasted hazelnuts",
+          "description_fr": "",
+          "description_en": "",
+          "prix": "12",
+          "signature": false,
+          "photo": ""
+        },
+        {
+          "nom_fr": "Poireaux vinaigrette, mimosa et herbes du moment",
+          "nom_en": "Leeks vinaigrette, egg mimosa, fresh herbs",
+          "description_fr": "",
+          "description_en": "",
+          "prix": "11",
+          "signature": false,
+          "photo": ""
+        },
+        {
+          "nom_fr": "Os à moelle rôti, fleur de sel et pain grillé",
+          "nom_en": "Roasted bone marrow, sea salt, toasted bread",
+          "description_fr": "",
+          "description_en": "",
+          "prix": "13",
+          "signature": false,
+          "photo": ""
+        }
+      ]
+    },
+    {
+      "titre_fr": "Planches",
+      "titre_en": "Sharing boards",
+      "plats": [
+        {
+          "nom_fr": "La planche de la Casa",
+          "nom_en": "The Casa board",
+          "description_fr": "Charcuteries affinées, fromages de saison, pain de campagne. Pour deux, ou pour l'apéritif à quatre.",
+          "description_en": "Cured meats, seasonal cheeses, country bread. For two, or as a starter for four.",
+          "prix": "26",
+          "signature": true,
+          "photo": "table-planche-a-partager.jpg"
+        },
+        {
+          "nom_fr": "Planche de fromages",
+          "nom_en": "Cheese board",
+          "description_fr": "Trois à cinq fromages selon l'arrivage.",
+          "description_en": "Three to five cheeses, depending on what came in.",
+          "prix": "18",
+          "signature": false,
+          "photo": ""
+        }
+      ]
+    },
+    {
+      "titre_fr": "Les plats",
+      "titre_en": "Mains",
+      "plats": [
+        {
+          "nom_fr": "Côte de bœuf « de la Casa »",
+          "nom_en": "Casa rib of beef",
+          "description_fr": "Environ un kilo, pour deux. Grillée, reposée, tranchée en salle. Pommes grenaille et sauce au poivre.",
+          "description_en": "About one kilo, for two. Grilled, rested, carved at the table. Baby potatoes and pepper sauce.",
+          "prix": "98",
+          "signature": true,
+          "photo": "table-cote-de-boeuf-de-la-casa.jpg"
+        },
+        {
+          "nom_fr": "Tartare de bœuf au couteau",
+          "nom_en": "Hand-cut beef tartare",
+          "description_fr": "Frites maison et salade.",
+          "description_en": "Hand-cut fries and salad.",
+          "prix": "22",
+          "signature": false,
+          "photo": ""
+        },
+        {
+          "nom_fr": "Poisson du marché, beurre blanc",
+          "nom_en": "Fish of the day, beurre blanc",
+          "description_fr": "Selon la criée.",
+          "description_en": "Depending on the catch.",
+          "prix": "26",
+          "signature": false,
+          "photo": ""
+        },
+        {
+          "nom_fr": "Risotto aux champignons des bois",
+          "nom_en": "Wild mushroom risotto",
+          "description_fr": "Plat végétarien.",
+          "description_en": "Vegetarian.",
+          "prix": "21",
+          "signature": false,
+          "photo": ""
+        }
+      ]
+    },
+    {
+      "titre_fr": "Desserts",
+      "titre_en": "Desserts",
+      "plats": [
+        {
+          "nom_fr": "Baba de la Casa",
+          "nom_en": "Casa rum baba",
+          "description_fr": "Imbibé au rhum vieux, crème fouettée à la vanille.",
+          "description_en": "Soaked in aged rum, vanilla whipped cream.",
+          "prix": "12",
+          "signature": true,
+          "photo": "table-baba-de-la-casa.jpg"
+        },
+        {
+          "nom_fr": "Tarte fine aux pommes",
+          "nom_en": "Thin apple tart",
+          "description_fr": "Cuite à la commande, glace vanille. Comptez quinze minutes.",
+          "description_en": "Baked to order, vanilla ice cream. Allow fifteen minutes.",
+          "prix": "12",
+          "signature": true,
+          "photo": "table-tarte-fine-aux-pommes.jpg"
+        },
+        {
+          "nom_fr": "Mousse au chocolat noir",
+          "nom_en": "Dark chocolate mousse",
+          "description_fr": "",
+          "description_en": "",
+          "prix": "10",
+          "signature": false,
+          "photo": ""
+        }
+      ]
+    }
+  ],
+  "note_fr": "Prix nets, service compris. La liste des allergènes est disponible sur demande.",
+  "note_en": "Prices include service. Allergen information available on request."
+}

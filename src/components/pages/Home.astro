@@ -1,0 +1,178 @@
+---
+import Base from '../../layouts/Base.astro';
+import Photo from '../ui/Photo.astro';
+import Heading from '../ui/Heading.astro';
+import Ornament from '../ui/Ornament.astro';
+import ReviewsBand from '../ReviewsBand.astro';
+import InstagramGrid from '../InstagramGrid.astro';
+import AccessBlock from '../AccessBlock.astro';
+import { t, href, type Lang } from '../../i18n/ui';
+import { infos, telHref, evenements, agendaAVenir, pick } from '../../lib/data';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const u = t(lang);
+const fr = lang === 'fr';
+const agenda = agendaAVenir().slice(0, 3);
+
+const c = fr
+  ? {
+      title: 'Casa Pelletier · Restaurant, bar à rhum & whisky, fumoir à cigares · Paris 14',
+      description: 'Restaurant français, bar à rhum et whisky et fumoir à cigares dans l’esprit d’un club anglais. Salons Chesterfield, cheminée, terrasse couverte. 101 rue du Château, Paris 14e, près de Montparnasse.',
+      eyebrow: 'Restaurant · Bar · Fumoir · Montparnasse',
+      h1: 'Un club anglais,<br /><em>rue du Château.</em>',
+      hook: 'Des fauteuils en cuir, un feu dans la cheminée, une côte de bœuf pour deux. Et tout le temps qu’il faut.',
+      introTitle: 'On vient pour dîner.<br />On reste pour la suite.',
+      intro: [
+        'Casa Pelletier tient à la fois du restaurant, du bar et du salon. Une cuisine française courte et soignée. Des rhums et des whiskies choisis un par un. Un fumoir à part, pour les amateurs de cigare.',
+        'Le tout dans des salons Chesterfield, à la lumière basse, à dix minutes de la gare Montparnasse.',
+      ],
+      blocks: [
+        { num: 'I', key: 'table' as const, img: 'table-cote-de-boeuf-de-la-casa.jpg', alt: 'Côte de bœuf de la Casa, tranchée sur une planche en bois', title: 'La Table', text: 'Une carte courte, des produits frais, une cuisine française sans détour. La côte de bœuf de la Casa se partage à deux. Le baba, lui, ne se partage pas toujours.', link: 'Voir la carte' },
+        { num: 'II', key: 'bar' as const, img: 'bar-comptoir-bois-sombre.jpg', alt: 'Le comptoir du bar en bois sombre, éclairé par des appliques en laiton', title: 'Le Bar', text: 'Rhums agricoles et de tradition anglaise, whiskies d’Écosse et d’ailleurs, cocktails maison autour de 18 €. On vous guide si vous le souhaitez.', link: 'Découvrir le bar' },
+        { num: 'III', key: 'fumoir' as const, img: 'fumoir-salon-cuir-ventile.jpg', alt: 'Le fumoir : fauteuils en cuir dans une pièce close aux murs sombres', title: 'Le Fumoir', text: 'Une pièce dédiée, close et ventilée, réservée aux amateurs de cigare. Le reste de la maison est non-fumeur. La cigarette n’y a pas sa place.', link: 'Le fumoir & la cave' },
+      ],
+      seasonsEyebrow: 'Été comme hiver',
+      seasons: [
+        { img: 'salon-chesterfield-lumiere-tamisee.jpg', alt: 'Salon Chesterfield à la lumière tamisée, près de la cheminée', title: 'Au coin du feu', text: 'Dès les premiers froids, la cheminée reprend du service. Les fauteuils les plus proches partent en premier.' },
+        { img: 'terrasse-arboree-couverte.jpg', alt: 'La terrasse couverte, sous les arbres, tables dressées', title: 'Sous les arbres', text: 'La terrasse est couverte et arborée. On y déjeune au calme, on y prend le dernier verre quand la nuit est douce.' },
+      ],
+      privEyebrow: 'Événements & privatisation',
+      privTitle: 'Jusqu’à 80 personnes,<br />sans perdre l’intimité.',
+      privText: 'Un salon pour vingt, ou toute la maison pour quatre-vingts. On construit le menu, le rythme et le bar avec vous.',
+      formats: 'Afterworks · Séminaires · Cocktails pro · Anniversaires · EVG',
+      agenda: 'Prochainement',
+    }
+  : {
+      title: 'Casa Pelletier · Restaurant, rum & whisky bar, cigar lounge · Paris 14th',
+      description: 'French restaurant, rum and whisky bar and cigar lounge in the spirit of an English club. Chesterfield lounges, fireplace, covered terrace. 101 rue du Château, Paris 14th, near Montparnasse.',
+      eyebrow: 'Restaurant · Bar · Cigar lounge · Montparnasse',
+      h1: 'An English club,<br /><em>rue du Château.</em>',
+      hook: 'Leather armchairs, a fire in the hearth, a rib of beef for two. And all the time you need.',
+      introTitle: 'You come for dinner.<br />You stay for what follows.',
+      intro: [
+        'Casa Pelletier is part restaurant, part bar, part lounge. A short, careful French menu. Rums and whiskies picked one bottle at a time. A separate smoking room for cigar lovers.',
+        'All of it in low-lit Chesterfield lounges, ten minutes from Gare Montparnasse.',
+      ],
+      blocks: [
+        { num: 'I', key: 'table' as const, img: 'table-cote-de-boeuf-de-la-casa.jpg', alt: 'The Casa rib of beef, carved on a wooden board', title: 'Dining', text: 'A short menu, fresh produce, honest French cooking. The Casa rib of beef is for two. The rum baba is not always shared.', link: 'See the menu' },
+        { num: 'II', key: 'bar' as const, img: 'bar-comptoir-bois-sombre.jpg', alt: 'The dark wood bar counter lit by brass wall lamps', title: 'The Bar', text: 'Agricole and British-style rums, Scotch and world whiskies, house cocktails at around €18. We are happy to guide you.', link: 'Discover the bar' },
+        { num: 'III', key: 'fumoir' as const, img: 'fumoir-salon-cuir-ventile.jpg', alt: 'The smoking room: leather armchairs in a closed, dark-walled room', title: 'The Cigar Lounge', text: 'A dedicated room, closed and ventilated, for cigar smokers. The rest of the house is non-smoking. Cigarettes are not allowed.', link: 'The cigar lounge' },
+      ],
+      seasonsEyebrow: 'Summer and winter',
+      seasons: [
+        { img: 'salon-chesterfield-lumiere-tamisee.jpg', alt: 'Low-lit Chesterfield lounge near the fireplace', title: 'By the fire', text: 'When the cold sets in, the fireplace is lit again. The closest armchairs go first.' },
+        { img: 'terrasse-arboree-couverte.jpg', alt: 'The covered terrace under the trees, tables set', title: 'Under the trees', text: 'The terrace is covered and planted with trees. A quiet lunch, or a last drink on a mild night.' },
+      ],
+      privEyebrow: 'Events & private hire',
+      privTitle: 'Up to 80 guests,<br />and still intimate.',
+      privText: 'A lounge for twenty, or the whole house for eighty. We plan the menu, the pace and the bar with you.',
+      formats: 'After-work drinks · Seminars · Corporate receptions · Birthdays · Stag parties',
+      agenda: 'Coming up',
+    };
+---
+<Base lang={lang} route="home" title={c.title} description={c.description} overlayHeader>
+  <!-- Hero -->
+  <section class="relative isolate flex min-h-svh items-end overflow-hidden">
+    <div class="absolute inset-0 -z-10">
+      <Photo src="hero-salon-cheminee.jpg" alt={fr ? 'Le salon de Casa Pelletier, fauteuils Chesterfield devant la cheminée allumée' : 'The Casa Pelletier lounge, Chesterfield armchairs in front of a lit fireplace'} eager sizes="100vw" widths={[640, 960, 1280, 1920, 2400]} imgClass="kenburns" />
+      <div class="absolute inset-0 bg-gradient-to-t from-noir via-noir/45 to-noir/30"></div>
+    </div>
+    <div class="wrap pt-40 pb-28 md:pb-24">
+      <p class="eyebrow fade-up">{c.eyebrow}</p>
+      <h1 class="display fade-up delay-1 mt-6 max-w-4xl [&_em]:text-laiton" set:html={c.h1} />
+      <p class="lead fade-up delay-2 mt-7 max-w-lg text-ivoire/85">{c.hook}</p>
+      <div class="fade-up delay-3 mt-10 flex flex-col gap-3 sm:flex-row">
+        <a href={telHref} class="btn-primary" data-track="tel-hero">{u.book} · {infos.telephone}</a>
+        {infos.reservationUrl && <a href={infos.reservationUrl} class="btn-ghost" rel="noopener">{u.bookOnline}</a>}
+        <a href={href('events', lang)} class="btn-ghost">{u.privatise}</a>
+      </div>
+      <p class="fade-up delay-3 mt-12 hidden text-xs tracking-[0.18em] text-ivoire-mute uppercase md:block">
+        {infos.adresse.rue} · {u.metro} 13 Gaîté / Pernety
+      </p>
+    </div>
+  </section>
+
+  <!-- Introduction -->
+  <section class="py-24 md:py-36">
+    <div class="wrap grid gap-10 md:grid-cols-12">
+      <h2 class="h-section md:col-span-6 [&_br]:hidden sm:[&_br]:inline" set:html={c.introTitle} data-reveal />
+      <div class="space-y-5 text-ivoire-mute md:col-span-5 md:col-start-8 md:pt-3" data-reveal>
+        {c.intro.map((p) => <p>{p}</p>)}
+      </div>
+    </div>
+  </section>
+
+  <!-- Trois univers -->
+  <section aria-label={fr ? 'La maison' : 'The house'} class="pb-12 md:pb-24">
+    {c.blocks.map((b, i) => (
+      <article class="wrap grid items-center gap-8 py-10 md:grid-cols-12 md:gap-12 md:py-16">
+        <div class:list={['group block aspect-[4/5] overflow-hidden sm:aspect-[4/3] md:col-span-7', i % 2 && 'md:order-2 md:col-start-6']} data-reveal>
+          <Photo src={b.img} alt={b.alt} sizes="(min-width: 768px) 58vw, 100vw" imgClass="transition-transform duration-[2s] ease-out hover:scale-[1.03]" />
+        </div>
+        <div class:list={['md:col-span-4', i % 2 ? 'md:order-1 md:col-start-1' : 'md:col-start-9']} data-reveal>
+          <p class="font-serif text-2xl text-laiton italic">{b.num}.</p>
+          <h3 class="mt-3 font-serif text-4xl sm:text-5xl">{b.title}</h3>
+          <p class="mt-5 text-ivoire-mute">{b.text}</p>
+          <a href={href(b.key, lang)} class="link-underline mt-7 inline-block text-[0.8rem] tracking-[0.18em] text-laiton uppercase">{b.link} →</a>
+        </div>
+      </article>
+    ))}
+  </section>
+
+  <!-- Saisons -->
+  <section class="bg-vert py-24 md:py-32">
+    <div class="wrap">
+      <p class="eyebrow mb-12" data-reveal>{c.seasonsEyebrow}</p>
+      <div class="grid gap-14 md:grid-cols-2 md:gap-10">
+        {c.seasons.map((s, i) => (
+          <figure class:list={[i === 1 && 'md:mt-24']} data-reveal>
+            <div class="aspect-[3/2] overflow-hidden"><Photo src={s.img} alt={s.alt} sizes="(min-width: 768px) 45vw, 100vw" /></div>
+            <figcaption class="mt-6 max-w-md">
+              <h3 class="font-serif text-3xl">{s.title}</h3>
+              <p class="mt-3 text-ivoire-mute">{s.text}</p>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Privatisation -->
+  <section class="relative isolate overflow-hidden py-24 md:py-36">
+    <div class="absolute inset-0 -z-10 opacity-35">
+      <Photo src="evenement-salon-privatise.jpg" alt={fr ? 'Un salon privatisé dressé pour une réception' : 'A private lounge set for a reception'} sizes="100vw" />
+    </div>
+    <div class="absolute inset-0 -z-10 bg-gradient-to-r from-noir via-noir/85 to-noir/50"></div>
+    <div class="wrap">
+      <Heading eyebrow={c.privEyebrow} title={c.privTitle} />
+      <p class="lead mt-6 max-w-xl" data-reveal>{c.privText}</p>
+      <p class="mt-8 max-w-2xl text-sm tracking-[0.12em] text-laiton uppercase" data-reveal>{c.formats}</p>
+      <div class="mt-10 flex flex-col gap-3 sm:flex-row" data-reveal>
+        <a href={href('events', lang) + '#devis'} class="btn-primary">{u.quote}</a>
+        <a href={href('events', lang)} class="btn-ghost">{fr ? 'Les formats' : 'Formats'}</a>
+      </div>
+    </div>
+  </section>
+
+  {agenda.length > 0 && (
+    <section class="border-y border-ivoire/10 py-16">
+      <div class="wrap grid gap-8 md:grid-cols-12">
+        <p class="eyebrow md:col-span-3">{c.agenda}</p>
+        <ul class="divide-y divide-ivoire/10 md:col-span-9">
+          {agenda.map((e) => (
+            <li class="grid gap-2 py-5 sm:grid-cols-[10rem_1fr]">
+              <time datetime={e.date} class="font-serif text-xl text-laiton">{new Date(e.date + 'T12:00:00').toLocaleDateString(fr ? 'fr-FR' : 'en-GB', { day: 'numeric', month: 'long' })}</time>
+              <div><h3 class="font-serif text-2xl">{pick(e, 'titre', lang)}</h3><p class="mt-1 text-sm text-ivoire-mute">{pick(e, 'texte', lang)}</p></div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  <ReviewsBand lang={lang} />
+  <InstagramGrid lang={lang} />
+  <div class="wrap"><Ornament class="py-2" /></div>
+  <AccessBlock lang={lang} />
+</Base>

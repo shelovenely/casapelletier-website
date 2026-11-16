@@ -1,0 +1,14 @@
+{
+  "_lisezMoi": "Questions fréquentes (page Infos pratiques). Les réponses marquées TODO sont à valider par le client.",
+  "questions": [
+    { "q_fr": "Faut-il réserver ?", "q_en": "Do I need to book?", "r_fr": "C'est préférable, surtout du jeudi au samedi et si vous voulez la côte de bœuf. Un appel suffit : 01 83 91 48 46.", "r_en": "It is best to, especially Thursday to Saturday, or if you want the rib of beef. A phone call is enough: +33 1 83 91 48 46." },
+    { "q_fr": "Y a-t-il un dress code ?", "q_en": "Is there a dress code?", "r_fr": "Pas de règle écrite. Une tenue correcte, et l'envie de passer une bonne soirée.", "r_en": "No written rule. Smart casual, and a wish to enjoy the evening." },
+    { "q_fr": "Peut-on fumer la cigarette ?", "q_en": "Can I smoke cigarettes?", "r_fr": "Non. La Casa est un lieu sans cigarette. Seul le cigare est admis, et uniquement dans le fumoir prévu à cet effet.", "r_en": "No. Casa Pelletier is cigarette-free. Only cigars are allowed, and only in the dedicated smoking room." },
+    { "q_fr": "Puis-je apporter mes propres cigares ?", "q_en": "Can I bring my own cigars?", "r_fr": "Oui, le fumoir est ouvert aux clients qui apportent leurs cigares. Demandez simplement à l'accueil en arrivant.", "r_en": "Yes, guests may bring their own cigars to the smoking room. Just let us know when you arrive." },
+    { "q_fr": "Le fumoir est-il accessible à tous ?", "q_en": "Who can use the smoking room?", "r_fr": "Le fumoir est réservé aux adultes. Conformément à la réglementation, aucun service n'y est assuré.", "r_en": "The smoking room is for adults only. As required by French law, no table service is provided inside." },
+    { "q_fr": "Accueillez-vous les groupes ?", "q_en": "Do you take groups?", "r_fr": "Oui, jusqu'à 80 personnes. Pour un afterwork, un séminaire ou un anniversaire, passez par la page Événements : on vous répond sous 48 heures.", "r_en": "Yes, up to 80 guests. For after-work drinks, seminars or birthdays, use the Events page: we reply within 48 hours." },
+    { "q_fr": "La terrasse est-elle ouverte toute l'année ?", "q_en": "Is the terrace open all year?", "r_fr": "Elle est couverte et arborée : on s'y installe dès que le temps le permet.", "r_en": "It is covered and planted with trees: we open it whenever the weather allows." },
+    { "q_fr": "Comment venir ?", "q_en": "How do I get there?", "r_fr": "Métro 13, stations Gaîté ou Pernety, à cinq minutes à pied. La gare Montparnasse est à dix minutes.", "r_en": "Metro line 13, Gaîté or Pernety stations, five minutes on foot. Gare Montparnasse is ten minutes away." }
+  ],
+  "_todo": "TODO client : valider la politique « cigares apportés » (droit de bouchon ?), l'âge d'accès au fumoir (16 ou 18 ans), le dress code, l'accès PMR, les enfants et les animaux."
+}

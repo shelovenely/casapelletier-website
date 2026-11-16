@@ -1,0 +1,34 @@
+---
+import Legal from '../../components/pages/Legal.astro';
+import { infos, adresseLigne } from '../../lib/data';
+const contact = infos.email || infos.telephone;
+---
+<Legal lang="fr" route="privacy" title="Politique de confidentialité · Casa Pelletier" description="Comment Casa Pelletier collecte et utilise vos données personnelles, et comment exercer vos droits (RGPD)." h1="Politique de confidentialité" updated="Dernière mise à jour : novembre 2026">
+  <p>Casa Pelletier collecte le moins de données possible. Cette page explique lesquelles, pourquoi, et comment exercer vos droits.</p>
+
+  <h2>Responsable du traitement</h2>
+  <p>[Raison sociale], {adresseLigne}. Contact : {contact}.</p>
+
+  <h2>Données collectées</h2>
+  <h3>Formulaire de demande de devis</h3>
+  <ul>
+    <li><strong>Données</strong> : nom, société (facultatif), e-mail, téléphone, date et nature de l'événement, nombre de personnes, budget, message.</li>
+    <li><strong>Finalité</strong> : répondre à votre demande et établir un devis.</li>
+    <li><strong>Base légale</strong> : votre consentement et les mesures précontractuelles prises à votre demande (art. 6.1.a et 6.1.b du RGPD).</li>
+    <li><strong>Durée de conservation</strong> : 3 ans à compter de notre dernier échange, puis suppression.</li>
+    <li><strong>Destinataires</strong> : l'équipe de Casa Pelletier uniquement. Les données ne sont ni vendues ni cédées.</li>
+  </ul>
+  <h3>Appels téléphoniques</h3>
+  <p>Les réservations par téléphone ne donnent lieu qu'à la conservation des informations nécessaires à la réservation (nom, nombre de couverts, numéro de téléphone).</p>
+
+  <h2>Sous-traitants</h2>
+  <ul>
+    <li><strong>Formspree</strong> (Formspree, Inc., États-Unis) : acheminement des formulaires. Transfert encadré par les clauses contractuelles types de la Commission européenne. <!-- TODO dev : vérifier l'adhésion de Formspree au Data Privacy Framework UE–États-Unis --></li>
+    <li><strong>Netlify</strong> (Netlify, Inc., États-Unis) : hébergement du site. Journaux techniques (adresse IP) conservés pour la sécurité.</li>
+    <li><strong>Google</strong> : carte intégrée, uniquement si vous l'acceptez (voir la <a href="/cookies/">politique cookies</a>).</li>
+  </ul>
+
+  <h2>Vos droits</h2>
+  <p>Vous disposez d'un droit d'accès, de rectification, d'effacement, de limitation, d'opposition et de portabilité de vos données, ainsi que du droit de retirer votre consentement à tout moment. Pour les exercer : {contact}.</p>
+  <p>Si vous estimez que vos droits ne sont pas respectés, vous pouvez adresser une réclamation à la CNIL (<a href="https://www.cnil.fr" rel="noopener">www.cnil.fr</a>).</p>
+</Legal>

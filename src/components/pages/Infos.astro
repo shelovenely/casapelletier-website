@@ -1,0 +1,78 @@
+---
+import Base from '../../layouts/Base.astro';
+import AccessBlock from '../AccessBlock.astro';
+import Heading from '../ui/Heading.astro';
+import { t, href, type Lang } from '../../i18n/ui';
+import { infos, faq, telHref, pick } from '../../lib/data';
+import { breadcrumbSchema, faqSchema } from '../../lib/schema';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const u = t(lang);
+const fr = lang === 'fr';
+const items = faq.questions.map((q) => ({ q: pick(q, 'q', lang), r: pick(q, 'r', lang) }));
+
+const c = fr
+  ? {
+      title: 'Infos pratiques · Horaires, accès, réservation · Casa Pelletier Paris 14',
+      description: 'Horaires, adresse et accès de Casa Pelletier : 101 rue du Château, Paris 14e, métro Gaîté ou Pernety (ligne 13), près de la gare Montparnasse. Réservation au 01 83 91 48 46.',
+      eyebrow: 'V. Infos pratiques',
+      h1: 'Venir à la Casa',
+      intro: 'Tout ce qu’il faut savoir avant de pousser la porte.',
+      faqEyebrow: 'Questions fréquentes',
+      faqTitle: 'Avant de venir',
+      contactTitle: 'Une autre question ?',
+      contactText: 'Appelez-nous, c’est encore le plus simple.',
+    }
+  : {
+      title: 'Visit us · Opening hours, directions, booking · Casa Pelletier Paris',
+      description: 'Opening hours, address and directions for Casa Pelletier: 101 rue du Château, Paris 14th, Gaîté or Pernety metro (line 13), near Gare Montparnasse. Book on +33 1 83 91 48 46.',
+      eyebrow: 'V. Visit us',
+      h1: 'Finding the Casa',
+      intro: 'Everything you need to know before you push the door.',
+      faqEyebrow: 'Frequently asked',
+      faqTitle: 'Before you come',
+      contactTitle: 'Another question?',
+      contactText: 'Give us a call. It is still the simplest way.',
+    };
+const crumbs = breadcrumbSchema(Astro.site!, [{ name: u.nav.home, path: href('home', lang) }, { name: u.nav.infos, path: href('infos', lang) }]);
+---
+<Base lang={lang} route="infos" title={c.title} description={c.description} schema={[crumbs, faqSchema(items)]}>
+  <section class="pt-36 pb-6 md:pt-44">
+    <div class="wrap">
+      <p class="eyebrow fade-up">{c.eyebrow}</p>
+      <h1 class="display fade-up delay-1 mt-5">{c.h1}</h1>
+      <p class="lead fade-up delay-2 mt-5 max-w-xl">{c.intro}</p>
+    </div>
+  </section>
+
+  <AccessBlock lang={lang} withLink={false} />
+
+  <section class="bg-vert py-24 md:py-32" id="faq">
+    <div class="wrap grid gap-12 lg:grid-cols-12">
+      <div class="lg:col-span-4">
+        <Heading eyebrow={c.faqEyebrow} title={c.faqTitle} />
+      </div>
+      <div class="divide-y divide-ivoire/15 border-y border-ivoire/15 lg:col-span-7 lg:col-start-6">
+        {items.map((i) => (
+          <details class="group py-5" data-reveal>
+            <summary class="flex cursor-pointer list-none items-baseline justify-between gap-6 font-serif text-2xl [&::-webkit-details-marker]:hidden">
+              {i.q}
+              <span aria-hidden="true" class="font-sans text-xl text-laiton transition-transform duration-500 group-open:rotate-45">+</span>
+            </summary>
+            <p class="mt-3 max-w-2xl text-ivoire-mute">{i.r}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="py-20 text-center">
+    <div class="wrap" data-reveal>
+      <h2 class="h-section">{c.contactTitle}</h2>
+      <p class="lead mt-4">{c.contactText}</p>
+      <a href={telHref} class="btn-primary mt-8">{u.call} · {infos.telephone}</a>
+      {infos.email && <p class="mt-5"><a href={`mailto:${infos.email}`} class="text-ivoire-mute underline underline-offset-4">{infos.email}</a></p>}
+    </div>
+  </section>
+</Base>
